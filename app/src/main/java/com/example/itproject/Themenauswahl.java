@@ -16,7 +16,7 @@ public class Themenauswahl extends AppCompatActivity {
         setContentView(R.layout.activity_themenauswahl);
 
         Button Klauselmenge = findViewById(R.id.button8);
-        Klauselmenge.setText("Klauselmengen");
+        Klauselmenge.setText("Klausel-\nmengen");
 
         Klauselmenge.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,7 +27,7 @@ public class Themenauswahl extends AppCompatActivity {
         });
 
         Button KNFmenge = findViewById(R.id.button9);
-        KNFmenge.setText("Normalformen");
+        KNFmenge.setText("Normal-\nformen");
 
         KNFmenge.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +38,7 @@ public class Themenauswahl extends AppCompatActivity {
         });
 
         Button Aussagenlogik = findViewById(R.id.button10);
-        Aussagenlogik.setText("Aussagenlogik");
+        Aussagenlogik.setText("Aussagen-\nlogik");
 
         Aussagenlogik.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +52,7 @@ public class Themenauswahl extends AppCompatActivity {
         text.setText("Bitte wählen Sie das Themengebiet aus!");
 
         Button Junktoren = findViewById(R.id.button31);
-        Junktoren.setText("Junktorenübung");
+        Junktoren.setText("Junktoren-\nübung");
 
         Junktoren.setOnClickListener(new View.OnClickListener() {
             @Override

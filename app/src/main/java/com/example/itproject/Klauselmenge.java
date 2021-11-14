@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -259,7 +261,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                 } catch (ParserException e) {
                     e.printStackTrace();
                 }
-
+                elf.setVisibility(View.VISIBLE);
                 break;
 
             case R.id.button11:
@@ -438,5 +440,26 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
+    public boolean onCreateOptionsMenu(Menu menu){
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.spiel_menu,menu);
+        return true;
+    }
+    //Für Neustart und Endscreen, es werden verschiedene Dinge resettet
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        try {
+            switch (item.getItemId()){
+                case R.id.cancel:
+                    activityWechsel();
+                    finish();
+                    break;
+
+            }
+        }catch (Exception e){
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }
