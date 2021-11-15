@@ -3,6 +3,7 @@ package com.example.itproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -29,14 +30,17 @@ public class Junktoren extends AppCompatActivity {
 
     public static int fragenanzahl = 0;
 
+    Button erfuellbar, nichterfuellbar, weiter;
+
     ArrayList<Boolean> Booluebernehmer = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_junktoren);
 
-        Button erfuellbar, nichterfuellbar, weiter;
+
         TextView Junktorenterm, AussagenTerm;
 
         erfuellbar = (Button) findViewById(R.id.button28);
@@ -45,6 +49,8 @@ public class Junktoren extends AppCompatActivity {
 
         Junktorenterm = findViewById(R.id.textView9);
         AussagenTerm = findViewById(R.id.textView10);
+
+        ButtonBlaumacher();
 
         fragenanzahl = 0;
         dreierTerm();
@@ -281,6 +287,16 @@ public class Junktoren extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void ButtonBlaumacher(){
+
+        erfuellbar.setBackgroundColor(Color.BLUE);
+        nichterfuellbar.setBackgroundColor(Color.BLUE);
+        weiter.setBackgroundColor(Color.BLUE);
+
+
+
     }
 
 }

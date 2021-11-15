@@ -1,6 +1,7 @@
 package com.example.itproject;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -57,6 +58,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_klauselmenge);
 
         if (savedInstanceState == null) {
@@ -64,6 +66,8 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         } else {
             fragenanzahl = (int) savedInstanceState.get("Frage");
         }
+
+
 
         text = findViewById(R.id.Text);
         Teilkalkuel1 = findViewById(R.id.textView);
@@ -84,6 +88,8 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         a = (Button) findViewById(R.id.buttona);
         b = (Button) findViewById(R.id.buttonb);
         c = (Button) findViewById(R.id.buttonc);
+
+        ButtonBlaumacher();
 
         Klauselwaehler.clear();
         EinzelKlausel.clear();
@@ -712,6 +718,15 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void ButtonBlaumacher(){
+        erfuellbar.setBackgroundColor(Color.BLUE);
+        nichtErfuellbar.setBackgroundColor(Color.BLUE);
+        elf.setBackgroundColor(Color.BLUE);
+        a.setBackgroundColor(Color.BLUE);
+        b.setBackgroundColor(Color.BLUE);
+        c.setBackgroundColor(Color.BLUE);
     }
 
 }

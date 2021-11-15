@@ -3,6 +3,7 @@ package com.example.itproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import org.logicng.io.parsers.PropositionalParser;
 import org.logicng.solvers.MiniSat;
 import org.logicng.solvers.SATSolver;
 import org.logicng.transformations.dnf.DNFFactorization;
+import org.mvel2.MVEL;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,8 +31,10 @@ public class NormalFormen extends AppCompatActivity {
     public static String Form = "";
     public static String test = "";
     public static int fragenanzahl = 0;
+    public static String texti = "";
 
     ArrayList<Boolean> DNFKNFGenerator = new ArrayList<>();
+    ArrayList<String> pruefListeErgebnis = new ArrayList<>();
 
 
     public static int schwierigkeitsgrad;
@@ -43,6 +47,7 @@ public class NormalFormen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_normal_formen);
 
         TextView text = findViewById(R.id.textView7);
@@ -65,6 +70,8 @@ public class NormalFormen extends AppCompatActivity {
         test = "";
 
 
+        ButtonBlaumacher();
+
         schwierigkeitsgrad = 0;
         fragenanzahl = 0;
         weiter.setVisibility(View.INVISIBLE);
@@ -72,10 +79,10 @@ public class NormalFormen extends AppCompatActivity {
         schwierigkeit(schwierigkeitsgrad);
         Modus();
 
-        if(DNFKNFGenerator.get(0)){
-            text.setText("Geben Sie für folgenden Term die DNF an! " + Aussage.toString());
-        }else {
-            text.setText("Geben Sie für folgenden Term die KNF an! " + Aussage.toString());
+        if (DNFKNFGenerator.get(0)) {
+            text.setText("Geben Sie für folgenden Term die DNF an! \n" + Aussage.toString());
+        } else {
+            text.setText("Geben Sie für folgenden Term die KNF an! \n" + Aussage.toString());
         }
 
 
@@ -147,7 +154,7 @@ public class NormalFormen extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     unterertext.setText(unterertext.getText().toString().substring(0, unterertext.getText().length() - 1));
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
@@ -157,46 +164,36 @@ public class NormalFormen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String uebernehmer = "";
-                uebernehmer = unterertext.getText().toString();
-
-                if (uebernehmer.contains("∧")) {
-                    uebernehmer = uebernehmer.replaceAll("∧", "&");
-                }
-                if (uebernehmer.contains("∨")) {
-                    uebernehmer = uebernehmer.replaceAll("∨", "\\|");
-                }
-                if (uebernehmer.contains("¬")) {
-                    uebernehmer = uebernehmer.replaceAll("¬", "~");
-                }
+                texti = "";
+                texti = unterertext.getText().toString();
 
 
+                ueberpruefer(schwierigkeitsgrad);
 
                 if (schwierigkeitsgrad == 0) {
-                    Form = Form.replaceAll("\\s+", "");
-                    if (Form.equals(uebernehmer)) {
-                        schwierigkeitsgrad = 1;
-                        bestaetigen.setBackgroundColor(Color.GREEN);
-                    } else {
-                        bestaetigen.setBackgroundColor(Color.RED);
-                    }
-                } else if (schwierigkeitsgrad == 1) {
-                    Form = Form.replaceAll("\\s+", "");
-                    if (Form.equals(uebernehmer)) {
-                        schwierigkeitsgrad = 2;
-                        bestaetigen.setBackgroundColor(Color.GREEN);
-                    } else {
+                    if (pruefListeErgebnis.contains("false")) {
                         schwierigkeitsgrad = 0;
                         bestaetigen.setBackgroundColor(Color.RED);
-                    }
-                } else {
-                    Form = Form.replaceAll("\\s+", "");
-                    if (Form.equals(uebernehmer)) {
-                        bestaetigen.setBackgroundColor(Color.GREEN);
                     } else {
                         schwierigkeitsgrad = 1;
-                        bestaetigen.setBackgroundColor(Color.RED);
+                        bestaetigen.setBackgroundColor(Color.GREEN);
                     }
+                } else if (schwierigkeitsgrad == 1) {
+                    if (pruefListeErgebnis.contains("false")) {
+                        schwierigkeitsgrad = 0;
+                        bestaetigen.setBackgroundColor(Color.RED);
+                    } else {
+                        schwierigkeitsgrad = 2;
+                        bestaetigen.setBackgroundColor(Color.GREEN);
+                    }
+                } else {
+                    if (pruefListeErgebnis.contains("false")) {
+                        schwierigkeitsgrad = 1;
+                        bestaetigen.setBackgroundColor(Color.RED);
+                    } else {
+                        bestaetigen.setBackgroundColor(Color.GREEN);
+                    }
+
                 }
                 weiter.setVisibility(View.VISIBLE);
             }
@@ -213,15 +210,16 @@ public class NormalFormen extends AppCompatActivity {
                     fragenanzahl++;
                     schwierigkeit(schwierigkeitsgrad);
                     Modus();
-                    if(DNFKNFGenerator.get(0)){
-                        text.setText("Geben Sie für folgenden Term die DNF an! " + Aussage.toString());
-                    }else {
-                        text.setText("Geben Sie für folgenden Term die KNF an! " + Aussage.toString());
+                    if (DNFKNFGenerator.get(0)) {
+                        text.setText("Geben Sie für folgenden Term die DNF an! \n" + Aussage.toString());
+                    } else {
+                        text.setText("Geben Sie für folgenden Term die KNF an! \n" + Aussage.toString());
                     }
 
                     weiter.setVisibility(View.INVISIBLE);
-                }else {
+                } else {
                     fragenanzahl = 0;
+                    schwierigkeitsgrad = 0;
                     activityWechsel();
                     finish();
                 }
@@ -589,27 +587,208 @@ public class NormalFormen extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.spiel_menu2,menu);
+        getMenuInflater().inflate(R.menu.spiel_menu2, menu);
         return true;
     }
+
     //Für Neustart und Endscreen, es werden verschiedene Dinge resettet
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         try {
-            switch (item.getItemId()){
+            switch (item.getItemId()) {
                 case R.id.cancel2:
                     fragenanzahl = 0;
+                    schwierigkeitsgrad = 0;
                     activityWechsel();
                     finish();
                     break;
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void ueberpruefer(int schwierigkeit) {
+        try {
+            ArrayList<String> geschrListe = new ArrayList<>();
+            ArrayList<String> formListe = new ArrayList<>();
+
+            geschrListe.clear();
+            formListe.clear();
+            pruefListeErgebnis.clear();
+
+            String geschriebenerText = "";
+            String formText = "";
+
+            geschriebenerText = texti;
+            formText = Form.replaceAll("\\s+", "");
+
+            if (geschriebenerText.contains("∧")) {
+                geschriebenerText = geschriebenerText.replaceAll("∧", "&&");
+            }
+            if (geschriebenerText.contains("∨")) {
+                geschriebenerText = geschriebenerText.replaceAll("∨", "\\||");
+            }
+            if (geschriebenerText.contains("¬")) {
+                geschriebenerText = geschriebenerText.replaceAll("¬", "!");
+            }
+
+            if (formText.contains("&")) {
+                formText = formText.replaceAll("&", "&&");
+            }
+            if (formText.contains("|")) {
+                formText = formText.replaceAll("\\|", "||");
+            }
+            if (formText.contains("~")) {
+                formText = formText.replaceAll("~", "!");
+            }
+
+
+            switch (schwierigkeit) {
+                case 0:
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "false")); // 00
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "true"));  // 01
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "false"));  // 10
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "true"));   // 11
+
+
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "false")); // 00
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "true"));  // 01
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "false"));  // 10
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "true"));   // 11
+
+                    for (int i = 0; i < formListe.size(); i++) {
+                        String linkervergleich = "";
+                        String rechtervergleich = "";
+
+                        linkervergleich = MVEL.evalToString(geschrListe.get(i));
+                        rechtervergleich = MVEL.evalToString(formListe.get(i));
+
+                        if (linkervergleich == rechtervergleich) {
+                            pruefListeErgebnis.add("true");
+                        } else {
+                            pruefListeErgebnis.add("false");
+                        }
+                    }
+
+                    break;
+
+                case 1:
+
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "false").replaceAll("c", "false")); // 000
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "false").replaceAll("c", "true"));  // 001
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "true").replaceAll("c", "false"));  // 010
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "true").replaceAll("c", "true"));   // 011
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "false").replaceAll("c", "false")); // 100
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "false").replaceAll("c", "true"));  // 101
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "true").replaceAll("c", "false"));  // 110
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "true").replaceAll("c", "true"));   // 111
+
+
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "false").replaceAll("c", "false")); // 000
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "false").replaceAll("c", "true"));  // 001
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "true").replaceAll("c", "false"));  // 010
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "true").replaceAll("c", "true"));   // 011
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "false").replaceAll("c", "false")); // 100
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "false").replaceAll("c", "true"));  // 101
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "true").replaceAll("c", "false"));  // 110
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "true").replaceAll("c", "true"));   // 111
+
+                    for (int i = 0; i < formListe.size(); i++) {
+                        String linkervergleich = "";
+                        String rechtervergleich = "";
+
+                        linkervergleich = MVEL.evalToString(geschrListe.get(i));
+                        rechtervergleich = MVEL.evalToString(formListe.get(i));
+
+                        if (linkervergleich == rechtervergleich) {
+                            pruefListeErgebnis.add("true");
+                        } else {
+                            pruefListeErgebnis.add("false");
+                        }
+                    }
+                    break;
+
+                case 2:
+
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "false").replaceAll("c", "false").replaceAll("d", "false"));   // 0000
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "false").replaceAll("c", "false").replaceAll("d", "true"));    // 0001
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "false").replaceAll("c", "true").replaceAll("d", "false"));    // 0010
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "false").replaceAll("c", "true").replaceAll("d", "true"));     // 0011
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "true").replaceAll("c", "false").replaceAll("d", "false"));   // 0100
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "true").replaceAll("c", "false").replaceAll("d", "true"));    // 0101
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "true").replaceAll("c", "true").replaceAll("d", "false"));    // 0110
+                    geschrListe.add(geschriebenerText.replaceAll("a", "false").replaceAll("b", "true").replaceAll("c", "true").replaceAll("d", "true"));     // 0111
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "false").replaceAll("c", "false").replaceAll("d", "false"));   // 1000
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "false").replaceAll("c", "false").replaceAll("d", "true"));    // 1001
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "false").replaceAll("c", "true").replaceAll("d", "false"));    // 1010
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "false").replaceAll("c", "true").replaceAll("d", "true"));     // 1011
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "true").replaceAll("c", "false").replaceAll("d", "false"));   // 1100
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "true").replaceAll("c", "false").replaceAll("d", "true"));    // 1101
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "true").replaceAll("c", "true").replaceAll("d", "false"));    // 1110
+                    geschrListe.add(geschriebenerText.replaceAll("a", "true").replaceAll("b", "true").replaceAll("c", "true").replaceAll("d", "true"));     // 1111
+
+
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "false").replaceAll("c", "false").replaceAll("d", "false"));   // 0000
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "false").replaceAll("c", "false").replaceAll("d", "true"));    // 0001
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "false").replaceAll("c", "true").replaceAll("d", "false"));    // 0010
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "false").replaceAll("c", "true").replaceAll("d", "true"));     // 0011
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "true").replaceAll("c", "false").replaceAll("d", "false"));   // 0100
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "true").replaceAll("c", "false").replaceAll("d", "true"));    // 0101
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "true").replaceAll("c", "true").replaceAll("d", "false"));    // 0110
+                    formListe.add(formText.replaceAll("a", "false").replaceAll("b", "true").replaceAll("c", "true").replaceAll("d", "true"));     // 0111
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "false").replaceAll("c", "false").replaceAll("d", "false"));   // 1000
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "false").replaceAll("c", "false").replaceAll("d", "true"));    // 1001
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "false").replaceAll("c", "true").replaceAll("d", "false"));    // 1010
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "false").replaceAll("c", "true").replaceAll("d", "true"));     // 1011
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "true").replaceAll("c", "false").replaceAll("d", "false"));   // 1100
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "true").replaceAll("c", "false").replaceAll("d", "true"));    // 1101
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "true").replaceAll("c", "true").replaceAll("d", "false"));    // 1110
+                    formListe.add(formText.replaceAll("a", "true").replaceAll("b", "true").replaceAll("c", "true").replaceAll("d", "true"));     // 1111
+
+                    for (int i = 0; i < formListe.size(); i++) {
+                        String linkervergleich = "";
+                        String rechtervergleich = "";
+
+                        linkervergleich = MVEL.evalToString(geschrListe.get(i));
+                        rechtervergleich = MVEL.evalToString(formListe.get(i));
+
+                        if (linkervergleich == rechtervergleich) {
+                            pruefListeErgebnis.add("true");
+                        } else {
+                            pruefListeErgebnis.add("false");
+                        }
+                    }
+                    break;
+
+            }
+        } catch (Exception e) {
+
+        }
+
+
+    }
+
+    public void ButtonBlaumacher(){
+
+        klammerauf.setBackgroundColor(Color.BLUE);
+        klammerzu.setBackgroundColor(Color.BLUE);
+        d.setBackgroundColor(Color.BLUE);
+        weiter.setBackgroundColor(Color.BLUE);
+        a.setBackgroundColor(Color.BLUE);
+        b.setBackgroundColor(Color.BLUE);
+        c.setBackgroundColor(Color.BLUE);
+        loeschen.setBackgroundColor(Color.BLUE);
+        bestaetigen.setBackgroundColor(Color.BLUE);
+        und.setBackgroundColor(Color.BLUE);
+        oder.setBackgroundColor(Color.BLUE);
+        nicht.setBackgroundColor(Color.BLUE);
+
     }
 
 }

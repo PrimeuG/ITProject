@@ -3,6 +3,7 @@ package com.example.itproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,7 +17,7 @@ import java.util.Random;
 
 public class AussagenLogik extends AppCompatActivity {
 
-    Button z, v, klammerauf, klammerzu, mindestensein, f, komma, und, g, implikation, b, nicht, loeschen, bestaetigen, weiter, fueralle, x, y;
+    public Button z, v, klammerauf, klammerzu, mindestensein, f, komma, und, g, implikation, b, nicht, loeschen, bestaetigen, weiter, fueralle, x, y;
     TextView AussagenAufgabe, AussagenAntwort;
 
     public static String LogikFormelString;
@@ -33,6 +34,7 @@ public class AussagenLogik extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_aussagen_logik);
 
         z = (Button) findViewById(R.id.button24);
@@ -54,24 +56,7 @@ public class AussagenLogik extends AppCompatActivity {
         x = (Button) findViewById(R.id.button15);
         y = (Button) findViewById(R.id.button21);
 
-        /*z.setOnClickListener(this);
-        v.setOnClickListener(this);
-        klammerzu.setOnClickListener(this);
-        klammerauf.setOnClickListener(this);
-        mindestensein.setOnClickListener(this);
-        f.setOnClickListener(this);
-        komma.setOnClickListener(this);
-
-        g.setOnClickListener(this);
-        implikation.setOnClickListener(this);
-        b.setOnClickListener(this);
-        nicht.setOnClickListener(this);
-        loeschen.setOnClickListener(this);
-        bestaetigen.setOnClickListener(this);
-        weiter.setOnClickListener(this);
-        fueralle.setOnClickListener(this);
-        x.setOnClickListener(this);
-        y.setOnClickListener(this);*/
+        ButtonBlaumacher();
 
         AussagenAufgabe = findViewById(R.id.Aussagenaufgabe);
         AussagenAntwort = findViewById(R.id.AussagenTerm);
@@ -80,7 +65,7 @@ public class AussagenLogik extends AppCompatActivity {
 
         weiter.setVisibility(View.INVISIBLE);
 
-        AussagenAufgabe.setText(AussageString.get(fragenzaehler) + "\n\n" + LogikString.get(fragenzaehler));
+        AussagenAufgabe.setText("Formalisieren Sie die folgende Aussage: \n" + AussageString.get(fragenzaehler) + "\nmit folgenden Prädikaten\n" + LogikString.get(fragenzaehler));
 
         und.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,7 +213,7 @@ public class AussagenLogik extends AppCompatActivity {
                 if (fragenzaehler < 2) {
                     AussagenAntwort.setText("");
                     fragenzaehler++;
-                    AussagenAufgabe.setText(AussageString.get(fragenzaehler) + "\n\n" + LogikString.get(fragenzaehler));
+                    AussagenAufgabe.setText("Formalisieren Sie die folgende Aussage: \n" + AussageString.get(fragenzaehler) + "\nmit folgenden Prädikaten\n" + LogikString.get(fragenzaehler));
                     weiter.setVisibility(View.INVISIBLE);
                     bestaetigen.setVisibility(View.VISIBLE);
 
@@ -547,6 +532,28 @@ public class AussagenLogik extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void ButtonBlaumacher(){
+
+        z.setBackgroundColor(Color.BLUE);
+        v.setBackgroundColor(Color.BLUE);
+        klammerzu.setBackgroundColor(Color.BLUE);
+        klammerauf.setBackgroundColor(Color.BLUE);
+        mindestensein.setBackgroundColor(Color.BLUE);
+        f.setBackgroundColor(Color.BLUE);
+        komma.setBackgroundColor(Color.BLUE);
+        und.setBackgroundColor(Color.BLUE);
+        g.setBackgroundColor(Color.BLUE);
+        implikation.setBackgroundColor(Color.BLUE);
+        b.setBackgroundColor(Color.BLUE);
+        nicht.setBackgroundColor(Color.BLUE);
+        loeschen.setBackgroundColor(Color.BLUE);
+        weiter.setBackgroundColor(Color.BLUE);
+        fueralle.setBackgroundColor(Color.BLUE);
+        x.setBackgroundColor(Color.BLUE);
+        y.setBackgroundColor(Color.BLUE);
+        bestaetigen.setBackgroundColor(Color.BLUE);
     }
 
 }
