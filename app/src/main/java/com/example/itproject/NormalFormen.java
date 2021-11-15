@@ -221,6 +221,7 @@ public class NormalFormen extends AppCompatActivity {
 
                     weiter.setVisibility(View.INVISIBLE);
                 }else {
+                    fragenanzahl = 0;
                     activityWechsel();
                     finish();
                 }
@@ -590,7 +591,7 @@ public class NormalFormen extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.spiel_menu,menu);
+        getMenuInflater().inflate(R.menu.spiel_menu2,menu);
         return true;
     }
     //Für Neustart und Endscreen, es werden verschiedene Dinge resettet
@@ -598,7 +599,8 @@ public class NormalFormen extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         try {
             switch (item.getItemId()){
-                case R.id.cancel:
+                case R.id.cancel2:
+                    fragenanzahl = 0;
                     activityWechsel();
                     finish();
                     break;

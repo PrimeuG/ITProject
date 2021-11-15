@@ -16,7 +16,6 @@ import org.logicng.formulas.FormulaFactory;
 import org.logicng.io.parsers.ParserException;
 import org.logicng.io.parsers.PropositionalParser;
 import org.logicng.transformations.dnf.DNFFactorization;
-import org.logicng.util.FormulaRandomizerConfig;
 import org.mvel2.MVEL;
 
 import java.util.ArrayList;
@@ -103,6 +102,7 @@ public class Junktoren extends AppCompatActivity {
                     AussagenTerm.setText("a = "+ Booluebernehmer.get(0) +" b = "+ Booluebernehmer.get(1) +" c = "+ Booluebernehmer.get(2) );
                     weiter.setVisibility(View.INVISIBLE);
                 }else {
+                    fragenanzahl = 0;
                     activityWechsel();
                     finish();
                 }
@@ -262,7 +262,7 @@ public class Junktoren extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.spiel_menu,menu);
+        getMenuInflater().inflate(R.menu.spiel_menu2,menu);
         return true;
     }
     //Für Neustart und Endscreen, es werden verschiedene Dinge resettet
@@ -270,7 +270,8 @@ public class Junktoren extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         try {
             switch (item.getItemId()){
-                case R.id.cancel:
+                case R.id.cancel2:
+                    fragenanzahl = 0;
                     activityWechsel();
                     finish();
                     break;

@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class AussagenLogik extends AppCompatActivity {
 
@@ -81,7 +80,7 @@ public class AussagenLogik extends AppCompatActivity {
 
         weiter.setVisibility(View.INVISIBLE);
 
-        AussagenAufgabe.setText(AussageString.get(fragenzaehler) + "\n" + LogikString.get(fragenzaehler));
+        AussagenAufgabe.setText(AussageString.get(fragenzaehler) + "\n\n" + LogikString.get(fragenzaehler));
 
         und.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,8 +212,8 @@ public class AussagenLogik extends AppCompatActivity {
                     AussagenAntwort.setText("RICHTIG!");
                     weiter.setBackgroundColor(Color.GREEN);
                 } else {
-                    AussagenAntwort.setText("Die Antwort lautet: " + LogikFormeln.get(fragenzaehler));
-                    weiter.setBackgroundColor(Color.RED);
+                    AussagenAntwort.setText("Die Musterlösung lautet: \n" + LogikFormeln.get(fragenzaehler));
+                    weiter.setBackgroundColor(Color.BLUE);
                 }
                 bestaetigen.setVisibility(View.INVISIBLE);
                 weiter.setVisibility(View.VISIBLE);
@@ -229,11 +228,12 @@ public class AussagenLogik extends AppCompatActivity {
                 if (fragenzaehler < 2) {
                     AussagenAntwort.setText("");
                     fragenzaehler++;
-                    AussagenAufgabe.setText(AussageString.get(fragenzaehler) + "\n" + LogikString.get(fragenzaehler));
+                    AussagenAufgabe.setText(AussageString.get(fragenzaehler) + "\n\n" + LogikString.get(fragenzaehler));
                     weiter.setVisibility(View.INVISIBLE);
                     bestaetigen.setVisibility(View.VISIBLE);
 
                 }else {
+                    fragenzaehler = 0;
                     activityWechsel();
                     finish();
 
@@ -259,67 +259,115 @@ public class AussagenLogik extends AppCompatActivity {
         ArrayList<String> Attribute = new ArrayList<>();  //Hier werden variable Attribute gespeichert welche Analog zu den Namen random verwendet werden
         ArrayList<String> Verben = new ArrayList<>();   //Analog zu den anderen beiden
 
+        ArrayList<String> Relation = new ArrayList<>(); //Analog zu denen davor
+        ArrayList<String> Interessiert = new ArrayList<>(); //Analog zu denen davor
+
         Formeln.clear();
         Aussagen.clear();
         Prädikate.clear();
         Namen.clear();
         Attribute.clear();
         Verben.clear();
+        Relation.clear();
+        Interessiert.clear();
 
 
-        Formeln.add("∀yv(y)((∀xf(x,y)->b(x))->g(y))");
+        Formeln.add("∀x∀yv(x,y)");
+        Formeln.add("∃x∀yv(x,y)");
+        Formeln.add("∀x∃yv(x,y)");
+        Formeln.add("∃y∀xv(x,y)");
+        Formeln.add("∀y∃xv(x,y)");
+        Formeln.add("∃x∃yv(x,y)");
+        Formeln.add("∀xv(x,x)");
+        Formeln.add("∃xv(x,x)");
+
+
+        Formeln.add("∀x(d(x)->s(x))");
+        Formeln.add("∀x(s(x)->(w(x)->t(x)))");
+        Formeln.add("∃xd(x)");//Eigenkreation
+
+        //Formel aus Klausur
+
         Formeln.add("∀xv(x)(∃yv(y)(f(x,y)∧g(x)))->g(x)))");
-        Formeln.add("∀x(g(x)-> b(x))");
-        Formeln.add("∀x((∀y(f(y, x)->g(y)))->b(x))"); //Sehr unsicher
-        Formeln.add("∀x(b(x)->∃y(f(x,y)∧¬(∃z(n(z)∧k(z,y)))))"); //https://formal.kastel.kit.edu/~beckert/teaching/Logik-SS06/hklausur_lsg.pdf
-        Formeln.add("∀x(v(x)->(∃yf(x,y))"); //debatierbar
-        Formeln.add("∀x(f(x,y)");
-        Formeln.add("∀x∀yf(x,y)");
 
 
-        Aussagen.add("Jeder X1 ist Z1, wenn alle seine X2 Z2 sind.");
-        Aussagen.add("Ein X1 ist Z1, wenn er X2 mindestens eines Z1 X1 ist.");
-        Aussagen.add("Alle Z1 X1 können V1.");
-        Aussagen.add("Jeder X1 ist Z1, wenn alle seine X2 V1 können.");
-        Aussagen.add("Jedes Problem hat eine Lösung, die kein X1 versteht.");
-        Aussagen.add("Für jeden X1 gibt es eine Lösung");
-        Aussagen.add("Jeder X1 mag X2");
-        Aussagen.add("Jeder mag jeden");
+        Aussagen.add("Jeder I1 jeden.");
+        Aussagen.add("Es gibt mindestens einen, der jeden I1.");
+        Aussagen.add("Jeder I1 mindestens einen.");
+        Aussagen.add("Es gibt mindestens einen, der von jedem I1 wird.");
+        Aussagen.add("Jeder wird von mindestens einem I1.");
+        Aussagen.add("Es gibt mindestens einen, der mindestens einen I1.");
+        Aussagen.add("Es gibt mindestens einen, der sich selbst I1.");
+        Aussagen.add("Es gibt mindestens einen, der sich selbst I1.");
 
-        Prädikate.add("v(x) - x ist X1\nf(x,y) - x ist X2 von y\ng(x) - x ist Z1\nb(x) - x ist Z2");
-        Prädikate.add("v(x) - x ist X1\nf(x,y) - x ist X2 von y\ng(x) - x ist Z1");
-        Prädikate.add("v(x) - x ist X1\ng(x) - x ist Z1\nb(x) - x kann V1");
-        Prädikate.add("v(x) - x ist X1\nf(y,x) - y ist X2 von x\ng(y) y ist Z1\nb(x) - x ist V1");
-        Prädikate.add("v(x) - x ist ein X1\nf(x,y) - y ist die Lösung von x\nb(x) - x ist ein Problem\nk(x,y) - x versteht y");
-        Prädikate.add("v(x) - x ist ein X1\nf(x,y) - y ist die Lösung von x");
-        Prädikate.add("v(x)- x ist ein X1\nf(x.y) x mag y\ng(y) - y ist X2");
-        Prädikate.add("f(x,y) - x mag y");
+        Aussagen.add("Jeder X1 V1");//https://people.umass.edu/partee/NZ_2006/More%20Answers%20for%20Practice%20in%20Logic%20and%20HW%201.pdf
+        Aussagen.add("Jeder X1 welcher V1 V2");
+        Aussagen.add("Es gibt mindestens einen welcher Z1 ist");//Eigenkreation
 
+        //Aussage aus Klausur
 
-        Attribute.add("blond");
-        Attribute.add("traurig");
-        Attribute.add("schön");
-        Attribute.add("lecker");
-        Attribute.add("dumm");
-        Attribute.add("grün");
-        Attribute.add("verkorkst");
+        //X Wesen, Z Eigenschaft, V tätigkeit, R Relation zueinander
+        Aussagen.add("Ein X1 ist Z1, wenn er R1 mindestens eines Z1 X1 ist.");
+
+        Prädikate.add("v(x,y) - x I1 y");
+        Prädikate.add("v(x,y) - x I1 y");
+        Prädikate.add("v(x,y) - x I1 y");
+        Prädikate.add("v(x,y) - x I1 y");
+        Prädikate.add("v(x,y) - x I1 y");
+        Prädikate.add("v(x,y) - x I1 y");
+        Prädikate.add("v(x,y) - x I1 y");
+        Prädikate.add("v(x,y) - x I1 y");
+
+        Prädikate.add("d(x) - x ist ein X1\ns(x) - x V1");
+        Prädikate.add("s(x) - x ist ein X1\nw(x) - x V1\nt(x) - x V2");
+        Prädikate.add("d(x) - x ist Z1"); //Eigenkreation
+
+        //Prädikate aus Klausur
+
+        Prädikate.add("v(x) - x ist X1\nf(x,y) - x ist R1 von y\ng(x) - x ist Z1");
+
+        Relation.add("Kind");
+        Relation.add("Bruder");
+        Relation.add("Onkel");
+        Relation.add("Vater");
+        Relation.add("Freund");
+
+        Interessiert.add("(ge)liebt");
+        Interessiert.add("verehrt");
+        Interessiert.add("(ge)hasst");
+        Interessiert.add("bewundert");
+        Interessiert.add("verachtet");
+        Interessiert.add("beneidet");
+        Interessiert.add("beschützt");
+        Interessiert.add("ingoriert");
+        Interessiert.add("verachtet");
+        Interessiert.add("verdammt");
+        Interessiert.add("verachtet");
+
+        Attribute.add("blond(en)");
+        Attribute.add("traurig(en)");
+        Attribute.add("schön(en)");
+        Attribute.add("dumm(en)");
+        Attribute.add("grün(en)");
+        Attribute.add("verkorkst(en)");
         Attribute.add("wissbegierig(en)");
-        Attribute.add("einsam");
+        Attribute.add("einsam(en)");
+        Attribute.add("lustigen(en)");
 
 
-        Verben.add("schwimmen");
-        Verben.add("fliegen");
-        Verben.add("tauchen");
-        Verben.add("tanzen");
-        Verben.add("singen");
-        Verben.add("schnarchen");
-        Verben.add("sterben");
-        Verben.add("essen");
-        Verben.add("trinken");
-        Verben.add("senieren");
-        Verben.add("denken");
-        Verben.add("atmen");
-        Verben.add("ertrinken");
+        Verben.add("schwimmt");
+        Verben.add("fliegt");
+        Verben.add("taucht");
+        Verben.add("tanzt");
+        Verben.add("singt");
+        Verben.add("schnarcht");
+        Verben.add("stirbt");
+        Verben.add("isst");
+        Verben.add("trinkt");
+        Verben.add("seniert");
+        Verben.add("denkt");
+        Verben.add("atmet");
+        Verben.add("ertrinkt");
 
 
         Namen.add("Ork(s)");
@@ -330,22 +378,22 @@ public class AussagenLogik extends AppCompatActivity {
         Namen.add("Butler");
         Namen.add("Elfen(s)");
         Namen.add("Roboter(s)");
-        Namen.add("Alien(s)");
+        Namen.add("Aliens(en)");
         Namen.add("Werwoelf(e)");
         Namen.add("Krieger");
-        Namen.add("Paladin");
+        Namen.add("Paladin(e)");
         Namen.add("Jäger");
-        Namen.add("Schurke");
+        Namen.add("Schurke(n)");
         Namen.add("Priester");
-        Namen.add("Schamane");
+        Namen.add("Schamane(n)");
         Namen.add("Magier");
         Namen.add("Hexenmeister");
-        Namen.add("Mönch");
-        Namen.add("Druide");
+        Namen.add("Mönch(e)");
+        Namen.add("Druide(n)");
         Namen.add("Dämonenjäger");
         Namen.add("Todesritter");
-        Namen.add("Elch");
-        Namen.add("Assassinen");
+        Namen.add("Elch(e)");
+        Namen.add("Assassine(n)");
 
 
         //Zufällige Zahl zwischen 0 und der size des Formel Arrays wird gebildet
@@ -396,11 +444,30 @@ public class AussagenLogik extends AppCompatActivity {
         }
         String Verb2 = Verben.get(randomVerb2);
 
+        //Analog zu Name und Attribut
+        int randomRelation1 = random.nextInt(Relation.size() - 0);
+        String Relation1 = Relation.get(randomRelation1);
+
+        int randomRelation2 = random.nextInt(Relation.size() - 0);
+        while (randomRelation1 == randomRelation2) {
+            randomRelation2 = random.nextInt(Relation.size() - 0);
+        }
+        String Relation2 = Relation.get(randomRelation2);
+
+        //Analog zu Name und Attribut
+        int randomInter1 = random.nextInt(Interessiert.size() - 0);
+        String Inter1 = Interessiert.get(randomInter1);
+
+        int randomInter2 = random.nextInt(Interessiert.size() - 0);
+        while (randomInter1 == randomInter2) {
+            randomInter2 = random.nextInt(Interessiert.size() - 0);
+        }
+        String Inter2 = Interessiert.get(randomInter2);
+
 
         //Hier wird das Zeug replaced mit den Namen die zufällig generiert wurden
-        String AusgabeAnzeige = Aussage.replaceAll("X1", Name1).replaceAll("X2", Name2).replaceAll("Z1", Attribut1).replaceAll("Z2", Attribut2).replaceAll("V1", Verb1).replaceAll("V2", Verb2);
-        String AnzeigePrädikate = Prädikat.replaceAll("X1", Name1).replaceAll("X2", Name2).replaceAll("Z1", Attribut1).replaceAll("Z2", Attribut2).replaceAll("V1", Verb1).replaceAll("V2", Verb2);
-
+        String AusgabeAnzeige = Aussage.replaceAll("X1", Name1).replaceAll("X2", Name2).replaceAll("Z1", Attribut1).replaceAll("Z2", Attribut2).replaceAll("V1", Verb1).replaceAll("V2", Verb2).replaceAll("R1", Relation1).replaceAll("R2", Relation2).replaceAll("I1", Inter1).replaceAll("I2", Inter2);
+        String AnzeigePrädikate = Prädikat.replaceAll("X1", Name1).replaceAll("X2", Name2).replaceAll("Z1", Attribut1).replaceAll("Z2", Attribut2).replaceAll("V1", Verb1).replaceAll("V2", Verb2).replaceAll("R1", Relation1).replaceAll("R2", Relation2).replaceAll("I1", Inter1).replaceAll("I2", Inter2);
         /*System.out.println(randomName1);
         System.out.println(Name1);
 
@@ -461,7 +528,7 @@ public class AussagenLogik extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.spiel_menu,menu);
+        getMenuInflater().inflate(R.menu.spiel_menu2,menu);
         return true;
     }
     //Für Neustart und Endscreen, es werden verschiedene Dinge resettet
@@ -469,7 +536,8 @@ public class AussagenLogik extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         try {
             switch (item.getItemId()){
-                case R.id.cancel:
+                case R.id.cancel2:
+                    fragenzaehler=0;
                     activityWechsel();
                     finish();
                     break;

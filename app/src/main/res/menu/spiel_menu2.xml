@@ -3,10 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/reset"
-        android:title="Reset" />
-
-    <item
-        android:id="@+id/cancel"
+        android:id="@+id/cancel2"
         android:title="Beenden" />
 </menu>
