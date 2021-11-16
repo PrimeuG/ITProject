@@ -83,7 +83,7 @@
         android:layout_height="0dp"
         android:text="TextView"
         android:textAlignment="center"
-        android:textSize="34sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline85"
         app:layout_constraintEnd_toStartOf="@+id/guideline82"
         app:layout_constraintStart_toStartOf="@+id/guideline81"

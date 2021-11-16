@@ -47,7 +47,7 @@ public class NormalFormen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_normal_formen);
 
         TextView text = findViewById(R.id.textView7);
@@ -394,7 +394,7 @@ public class NormalFormen extends AppCompatActivity {
         ArrayList<String> Negation = new ArrayList<String>();
         ArrayList<String> offeneKlammer = new ArrayList<String>();
         ArrayList<String> Variable = new ArrayList<String>();
-        ArrayList<Boolean> GeschlosseneKlammer = new ArrayList<Boolean>();
+        ArrayList<String> GeschlosseneKlammer = new ArrayList<String>();
 
         LogikAussage.clear();
         Junktoren.clear();
@@ -415,8 +415,8 @@ public class NormalFormen extends AppCompatActivity {
         Variable.add("b");
         Variable.add("c");
         Variable.add("d");
-        GeschlosseneKlammer.add(true);
-        GeschlosseneKlammer.add(false);
+        GeschlosseneKlammer.add("");
+        GeschlosseneKlammer.add(")");
 
         Collections.shuffle(Junktoren);
         Collections.shuffle(Negation);
@@ -424,69 +424,146 @@ public class NormalFormen extends AppCompatActivity {
         Collections.shuffle(offeneKlammer);
         Collections.shuffle(GeschlosseneKlammer);
 
-        LogikAussage.add(Negation.get(0));              //0
-        LogikAussage.add(offeneKlammer.get(0));         //1
-        if (LogikAussage.contains("(")) {
-            Collections.shuffle(Negation);
-            LogikAussage.add(Negation.get(0));          //2
-        } else {
-            LogikAussage.add("");                       //2
-        }
-        LogikAussage.add(Variable.get(0));              //3
-        LogikAussage.add(Junktoren.get(0));             //4
-        Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));              //5
-        Collections.shuffle(offeneKlammer);
-        LogikAussage.add(offeneKlammer.get(0));         //6
-        Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));              //7
-        LogikAussage.add(Variable.get(1));              //8
-
-        if (LogikAussage.contains("(")) {
-            if (LogikAussage.get(6).equals("(")) {
-                LogikAussage.add("");                   //9
-            } else {
-                LogikAussage.add(")");                  //9
-            }
-        } else {
-            LogikAussage.add("");                       //9
-        }
-
+        LogikAussage.add(Negation.get(0));          //0
+        LogikAussage.add(Variable.get(0));          //1
         Collections.shuffle(Junktoren);
-        LogikAussage.add(Junktoren.get(0));             //10
+        LogikAussage.add(Junktoren.get(0));         //2
         Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));              //11
-        Collections.shuffle(offeneKlammer);
-        if (LogikAussage.get(6).equals("(")) {
-            LogikAussage.add("");                       //12
-        } else {
-            LogikAussage.add(offeneKlammer.get(0));     //12
+        LogikAussage.add(Negation.get(0));          //3
+        LogikAussage.add(Variable.get(1));          //4
+        Collections.shuffle(Junktoren);
+        LogikAussage.add(Junktoren.get(0));         //5
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));          //6
+        LogikAussage.add(Variable.get(2));          //7
+        Collections.shuffle(Junktoren);
+        LogikAussage.add(Junktoren.get(0));         //8
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));          //9
+        LogikAussage.add(Variable.get(3));          //10
+
+        if (LogikAussage.contains("<=>") || LogikAussage.contains("=>")){
+
+            if ((LogikAussage.get(8).equals("<=>")||LogikAussage.get(8).equals("=>"))&&(LogikAussage.get(5).equals("<=>")||LogikAussage.get(5).equals("=>"))&&(LogikAussage.get(2).equals("<=>")||LogikAussage.get(2).equals("=>"))){
+                LogikAussage.add(")");
+                LogikAussage.add(")");
+                LogikAussage.add(6,"(");
+                LogikAussage.add(3,"(");
+            }else if ((LogikAussage.get(8).equals("<=>")||LogikAussage.get(8).equals("=>"))&&(LogikAussage.get(5).equals("<=>")||LogikAussage.get(5).equals("=>"))){
+                LogikAussage.add(")");
+                LogikAussage.add(6,"(");
+            }else if ((LogikAussage.get(2).equals("<=>")||LogikAussage.get(2).equals("=>"))&&(LogikAussage.get(5).equals("<=>")||LogikAussage.get(5).equals("=>"))){
+                LogikAussage.add(")");
+                LogikAussage.add(3,"(");
+            }else if ((LogikAussage.get(2).equals("<=>")||LogikAussage.get(2).equals("=>"))&&(LogikAussage.get(8).equals("<=>")||LogikAussage.get(8).equals("=>"))){
+                LogikAussage.add(5,")");
+                LogikAussage.add(0,"(");
+            }
         }
-        if (LogikAussage.get(12).equals("(")) {
+
+        /*LogikAussage.add(Negation.get(0));                                          //0
+        LogikAussage.add(offeneKlammer.get(0));                                     //1
+        if (LogikAussage.contains("(")) {                                           //2
             Collections.shuffle(Negation);
-            LogikAussage.add(Negation.get(0));          //13
-        } else {
-            LogikAussage.add("");                       //13
+            LogikAussage.add(Negation.get(0));
+        } else {                                                                    //2
+            LogikAussage.add("");
         }
-        LogikAussage.add(Variable.get(2));              //14
-        if (LogikAussage.get(6).equals("(")) {
+        LogikAussage.add(Variable.get(0));                                          //3
+        LogikAussage.add(Junktoren.get(0));                                         //4
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));                                          //5
+        if (LogikAussage.contains("(")){                                            //6
+            LogikAussage.add("");
+        }else if (LogikAussage.contains("<=>") || LogikAussage.contains("=>")){     //6
+            LogikAussage.add("(");
+        }else {                                                                     //6
+            Collections.shuffle(offeneKlammer);
+            LogikAussage.add(offeneKlammer.get(0));
+        }
+        if (LogikAussage.get(6).equals("(")){                                       //7
+            Collections.shuffle(Negation);
+            LogikAussage.add(Negation.get(0));
+        }else {                                                                     //7
+            LogikAussage.add("");
+        }
+        LogikAussage.add(Variable.get(1));                                          //8
+        if (LogikAussage.get(6).equals("(")){                                       //9
+            LogikAussage.add("");
+        }else if (LogikAussage.get(4).equals("<=>")||LogikAussage.get(4).equals("=>")){ //9
+            LogikAussage.set(1,"(");
+            LogikAussage.add(")");
+        }else if (LogikAussage.get(1).equals("(")){                                 //9
             Collections.shuffle(GeschlosseneKlammer);
-            if (GeschlosseneKlammer.get(0)) {
-                LogikAussage.add(")");                  //15
-            } else {
-                LogikAussage.add("");                   //15
-            }
-        } else if (LogikAussage.get(12).equals("(")) {
-            LogikAussage.add("");                       //15
+            LogikAussage.add(GeschlosseneKlammer.get(0));
+        }else {                                                                     //9
+            LogikAussage.add("");
         }
         Collections.shuffle(Junktoren);
-        LogikAussage.add(Junktoren.get(0));             //16
+        LogikAussage.add(Junktoren.get(0));                                         //10
         Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));              //17
-        LogikAussage.add(Variable.get(3));              //18
-        if (LogikAussage.get(12).equals("(")) {
-            LogikAussage.add(")");                      //19
+        LogikAussage.add(Negation.get(0));                                          //11
+
+        if (LogikAussage.contains("(")){
+            if (LogikAussage.get(6).equals("(")){                                   //12
+                Collections.shuffle(offeneKlammer);
+                LogikAussage.add(offeneKlammer.get(0));
+            }else if (LogikAussage.get(1).equals("(")){                             //12
+                LogikAussage.add("");
+            }
+        }else {                                                                     //12
+            Collections.shuffle(offeneKlammer);
+            LogikAussage.add(offeneKlammer.get(0));
         }
+
+        if (LogikAussage.get(12).equals("(")){                                      //13
+            Collections.shuffle(Negation);
+            LogikAussage.add(Negation.get(0));
+        }else {                                                                     //13
+            LogikAussage.add("");
+        }
+        LogikAussage.add(Variable.get(2));                                          //14
+
+        if (LogikAussage.contains("(")){
+            if (LogikAussage.get(12).equals("(")){
+                LogikAussage.add("");
+            }else if (LogikAussage.get(6).equals("(")){
+                if (LogikAussage.get(1).equals("(")){
+                    LogikAussage.add(")");
+                }else if (LogikAussage.get(10).equals("<=>")||LogikAussage.get(10).equals("=>")){
+                    LogikAussage.add(")");
+                }else {
+                    Collections.shuffle(GeschlosseneKlammer);
+                    LogikAussage.add(GeschlosseneKlammer.get(0));
+                }
+
+            }else if (LogikAussage.get(1).equals("(")){
+                if (LogikAussage.contains(")")){
+                    LogikAussage.add("");
+                }else {
+                    LogikAussage.add(")");
+                }
+            }
+        }else {                                                                     //15
+            LogikAussage.add("");
+        }
+        Collections.shuffle(Junktoren);
+        LogikAussage.add(Junktoren.get(0));                                         //16
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));                                          //17
+        LogikAussage.add(Variable.get(3));                                          //18
+        if (LogikAussage.get(12).equals("(")){
+            LogikAussage.add(")");
+        }
+        if (LogikAussage.get(6).equals("(")||LogikAussage.get(1).equals("(")){
+            if(LogikAussage.get(9).equals(")")||LogikAussage.get(15).equals(")")){
+                LogikAussage.add("");
+            }else {
+                LogikAussage.add(")");
+            }
+        }*/
+
+
 
         for (int i = 0; i < LogikAussage.size(); i++) {
             ParserText += LogikAussage.get(i);
@@ -774,7 +851,7 @@ public class NormalFormen extends AppCompatActivity {
 
     }
 
-    public void ButtonBlaumacher(){
+    public void ButtonBlaumacher() {
 
         klammerauf.setBackgroundColor(Color.BLUE);
         klammerzu.setBackgroundColor(Color.BLUE);
