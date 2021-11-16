@@ -67,6 +67,7 @@
         android:id="@+id/Aussagenaufgabe"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:textSize="12sp"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/guideline59"
         app:layout_constraintEnd_toStartOf="@+id/guideline62"

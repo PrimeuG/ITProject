@@ -159,7 +159,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="Löschen"
-        android:textSize="10sp"
+        android:textSize="9sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline54"
         app:layout_constraintEnd_toStartOf="@+id/guideline39"
         app:layout_constraintStart_toStartOf="@+id/guideline98"

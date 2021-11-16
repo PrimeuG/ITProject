@@ -269,7 +269,7 @@ public class AussagenLogik extends AppCompatActivity {
 
         Formeln.add("∀x(d(x)->s(x))");
         Formeln.add("∀x(s(x)->(w(x)->t(x)))");
-        Formeln.add("∃xd(x)");//Eigenkreation
+        //Formeln.add("∃xd(x)");//Eigenkreation
 
         //Formel aus Klausur
 
@@ -282,12 +282,12 @@ public class AussagenLogik extends AppCompatActivity {
         Aussagen.add("Es gibt mindestens einen, der von jedem I1 wird.");
         Aussagen.add("Jeder wird von mindestens einem I1.");
         Aussagen.add("Es gibt mindestens einen, der mindestens einen I1.");
-        Aussagen.add("Es gibt mindestens einen, der sich selbst I1.");
+        Aussagen.add("Jeder I2 sich selbst.");
         Aussagen.add("Es gibt mindestens einen, der sich selbst I1.");
 
-        Aussagen.add("Jeder X1 V1");//https://people.umass.edu/partee/NZ_2006/More%20Answers%20for%20Practice%20in%20Logic%20and%20HW%201.pdf
-        Aussagen.add("Jeder X1 welcher V1 V2");
-        Aussagen.add("Es gibt mindestens einen welcher Z1 ist");//Eigenkreation
+        Aussagen.add("Jeder X1 V1.");//https://people.umass.edu/partee/NZ_2006/More%20Answers%20for%20Practice%20in%20Logic%20and%20HW%201.pdf
+        Aussagen.add("Jeder X1 welcher V1 V2.");
+        //Aussagen.add("Es gibt mindestens einen welcher Z1 ist.");//Eigenkreation
 
         //Aussage aus Klausur
 
@@ -305,7 +305,7 @@ public class AussagenLogik extends AppCompatActivity {
 
         Prädikate.add("d(x) - x ist ein X1\ns(x) - x V1");
         Prädikate.add("s(x) - x ist ein X1\nw(x) - x V1\nt(x) - x V2");
-        Prädikate.add("d(x) - x ist Z1"); //Eigenkreation
+        //Prädikate.add("d(x) - x ist Z1"); //Eigenkreation
 
         //Prädikate aus Klausur
 
@@ -324,7 +324,7 @@ public class AussagenLogik extends AppCompatActivity {
         Interessiert.add("verachtet");
         Interessiert.add("beneidet");
         Interessiert.add("beschützt");
-        Interessiert.add("ingoriert");
+        Interessiert.add("ignoriert");
         Interessiert.add("verachtet");
         Interessiert.add("verdammt");
         Interessiert.add("verachtet");
@@ -358,26 +358,25 @@ public class AussagenLogik extends AppCompatActivity {
         Namen.add("Ork(s)");
         Namen.add("Champion(s)");
         Namen.add("Held(en)");
-        Namen.add("Vampir(e)");
-        Namen.add("Dinosaurier");
-        Namen.add("Butler");
-        Namen.add("Elfen(s)");
+        Namen.add("Vampir(s)");
+        Namen.add("Dinosaurier(s)");
+        Namen.add("Butler(s)");
+        Namen.add("Elf(en)");
         Namen.add("Roboter(s)");
-        Namen.add("Aliens(en)");
-        Namen.add("Werwoelf(e)");
-        Namen.add("Krieger");
-        Namen.add("Paladin(e)");
-        Namen.add("Jäger");
+        Namen.add("Werwoelf(es)");
+        Namen.add("Krieger(s)");
+        Namen.add("Paladin(s)");
+        Namen.add("Jäger(s)");
         Namen.add("Schurke(n)");
-        Namen.add("Priester");
+        Namen.add("Priester(s)");
         Namen.add("Schamane(n)");
-        Namen.add("Magier");
-        Namen.add("Hexenmeister");
-        Namen.add("Mönch(e)");
+        Namen.add("Magier(s)");
+        Namen.add("Hexenmeister(s)");
+        Namen.add("Mönch(es)");
         Namen.add("Druide(n)");
-        Namen.add("Dämonenjäger");
-        Namen.add("Todesritter");
-        Namen.add("Elch(e)");
+        Namen.add("Dämonenjäger(s)");
+        Namen.add("Todesritter(s)");
+        Namen.add("Elch(es)");
         Namen.add("Assassine(n)");
 
 
