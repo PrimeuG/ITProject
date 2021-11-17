@@ -47,7 +47,7 @@ public class Themenauswahl extends AppCompatActivity {
 
         Button Aussagenlogik = findViewById(R.id.button10);
         Aussagenlogik.setBackgroundColor(Color.BLUE);
-        Aussagenlogik.setText("Aussagen-\nlogik");
+        Aussagenlogik.setText("Prädikaten-\nlogik");
 
         Aussagenlogik.setOnClickListener(new View.OnClickListener() {
             @Override

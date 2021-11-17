@@ -42,7 +42,7 @@ public class NormalFormen extends AppCompatActivity {
     public TextView unterertext;
 
 
-    Button klammerauf, klammerzu, d, weiter, a, b, c, loeschen, bestaetigen, und, oder, nicht;
+    Button klammerauf, klammerzu, d, weiter, a, b, c, loeschen, bestaetigen, und, oder, nicht, Buttonnochmal, ButtonLoesung;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,6 @@ public class NormalFormen extends AppCompatActivity {
 
         klammerauf = findViewById(R.id.klammerauf);
         klammerzu = findViewById(R.id.klammerzu);
-
         a = findViewById(R.id.A);
         b = findViewById(R.id.B);
         c = findViewById(R.id.C);
@@ -67,14 +66,18 @@ public class NormalFormen extends AppCompatActivity {
         oder = findViewById(R.id.oder);
         nicht = findViewById(R.id.nicht);
         weiter = findViewById(R.id.weiter);
+        Buttonnochmal = findViewById(R.id.Nochmal);
+        ButtonLoesung = findViewById(R.id.Loesung);
         test = "";
 
 
         ButtonBlaumacher();
 
-        schwierigkeitsgrad = 0;
+        schwierigkeitsgrad = 2;
         fragenanzahl = 0;
         weiter.setVisibility(View.INVISIBLE);
+        ButtonLoesung.setVisibility(View.INVISIBLE);
+        Buttonnochmal.setVisibility(View.INVISIBLE);
 
         schwierigkeit(schwierigkeitsgrad);
         Modus();
@@ -174,28 +177,49 @@ public class NormalFormen extends AppCompatActivity {
                     if (pruefListeErgebnis.contains("false")) {
                         schwierigkeitsgrad = 0;
                         bestaetigen.setBackgroundColor(Color.RED);
-                    } else {
+                    } else if (pruefListeErgebnis.contains("true")) {
                         schwierigkeitsgrad = 1;
                         bestaetigen.setBackgroundColor(Color.GREEN);
+                    } else {
+                        schwierigkeitsgrad = 0;
+                        bestaetigen.setBackgroundColor(Color.RED);
                     }
                 } else if (schwierigkeitsgrad == 1) {
                     if (pruefListeErgebnis.contains("false")) {
                         schwierigkeitsgrad = 0;
                         bestaetigen.setBackgroundColor(Color.RED);
-                    } else {
+                    } else if (pruefListeErgebnis.contains("true")) {
                         schwierigkeitsgrad = 2;
                         bestaetigen.setBackgroundColor(Color.GREEN);
+                    } else {
+                        schwierigkeitsgrad = 0;
+                        bestaetigen.setBackgroundColor(Color.RED);
                     }
                 } else {
                     if (pruefListeErgebnis.contains("false")) {
-                        schwierigkeitsgrad = 1;
+                        //schwierigkeitsgrad = 1;
                         bestaetigen.setBackgroundColor(Color.RED);
-                    } else {
+                    } else if (pruefListeErgebnis.contains("true")) {
                         bestaetigen.setBackgroundColor(Color.GREEN);
+                    } else {
+                        //schwierigkeitsgrad = 1;
+                        bestaetigen.setBackgroundColor(Color.RED);
                     }
 
                 }
                 weiter.setVisibility(View.VISIBLE);
+                Buttonnochmal.setVisibility(View.VISIBLE);
+                ButtonLoesung.setVisibility(View.VISIBLE);
+                a.setVisibility(View.INVISIBLE);
+                b.setVisibility(View.INVISIBLE);
+                c.setVisibility(View.INVISIBLE);
+                d.setVisibility(View.INVISIBLE);
+                loeschen.setVisibility(View.INVISIBLE);
+                und.setVisibility(View.INVISIBLE);
+                oder.setVisibility(View.INVISIBLE);
+                nicht.setVisibility(View.INVISIBLE);
+                klammerauf.setVisibility(View.INVISIBLE);
+                klammerzu.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -217,12 +241,66 @@ public class NormalFormen extends AppCompatActivity {
                     }
 
                     weiter.setVisibility(View.INVISIBLE);
+                    Buttonnochmal.setVisibility(View.INVISIBLE);
+                    ButtonLoesung.setVisibility(View.INVISIBLE);
+
+                    a.setVisibility(View.VISIBLE);
+                    b.setVisibility(View.VISIBLE);
+                    c.setVisibility(View.VISIBLE);
+                    d.setVisibility(View.VISIBLE);
+                    loeschen.setVisibility(View.VISIBLE);
+                    bestaetigen.setVisibility(View.VISIBLE);
+                    und.setVisibility(View.VISIBLE);
+                    oder.setVisibility(View.VISIBLE);
+                    nicht.setVisibility(View.VISIBLE);
+                    klammerauf.setVisibility(View.VISIBLE);
+                    klammerzu.setVisibility(View.VISIBLE);
                 } else {
                     fragenanzahl = 0;
                     schwierigkeitsgrad = 0;
                     activityWechsel();
                     finish();
                 }
+            }
+        });
+
+        Buttonnochmal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                unterertext.setText("");
+                bestaetigen.setBackgroundColor(Color.BLUE);
+
+                weiter.setVisibility(View.INVISIBLE);
+                Buttonnochmal.setVisibility(View.INVISIBLE);
+                ButtonLoesung.setVisibility(View.INVISIBLE);
+
+                a.setVisibility(View.VISIBLE);
+                b.setVisibility(View.VISIBLE);
+                c.setVisibility(View.VISIBLE);
+                d.setVisibility(View.VISIBLE);
+                loeschen.setVisibility(View.VISIBLE);
+                bestaetigen.setVisibility(View.VISIBLE);
+                und.setVisibility(View.VISIBLE);
+                oder.setVisibility(View.VISIBLE);
+                nicht.setVisibility(View.VISIBLE);
+                klammerauf.setVisibility(View.VISIBLE);
+                klammerzu.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        ButtonLoesung.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String formuebernehmer = Form;
+
+                try {
+                    formuebernehmer = formuebernehmer.replaceAll("~", "¬").replaceAll("&", "∧").replaceAll("\\|", "∨").replaceAll("\\s+","");
+                    unterertext.setText(formuebernehmer);
+                } catch (Exception e) {
+
+                }
+
             }
         });
 
@@ -335,7 +413,7 @@ public class NormalFormen extends AppCompatActivity {
 
         Collections.shuffle(Negation);
         LogikAussage.add(Negation.get(0));          //0
-        LogikAussage.add(Variable.get(0));          //1
+        LogikAussage.add(Variable.get(0));          //1                     ~a|~b|~c
         Collections.shuffle(Junktoren);
         LogikAussage.add(Junktoren.get(0));          //2
         Collections.shuffle(Negation);
@@ -347,17 +425,23 @@ public class NormalFormen extends AppCompatActivity {
         LogikAussage.add(Negation.get(0));          //6
         LogikAussage.add(Variable.get(2));          //7
 
-        if ((LogikAussage.get(2).equals("<=>")||LogikAussage.get(2).equals("=>"))&&(LogikAussage.get(5).equals("<=>")||LogikAussage.get(5).equals("=>"))){
-            LogikAussage.add(3,"(");
+        if ((LogikAussage.get(2).equals("<=>") || LogikAussage.get(2).equals("=>")) && (LogikAussage.get(5).equals("<=>") || LogikAussage.get(5).equals("=>"))) {
+            LogikAussage.add(3, "(");
             LogikAussage.add(")");
-        }else if (Klammergeber.get(0)==0){
+        } else if ((LogikAussage.get(2).equals("<=>") || LogikAussage.get(2).equals("=>"))) {
+            LogikAussage.add(5, ")");
+            LogikAussage.add(0, "(");
+        } else if ((LogikAussage.get(5).equals("<=>") || LogikAussage.get(5).equals("=>"))) {
+            LogikAussage.add(3, "(");
+            LogikAussage.add(")");
+        } else if (Klammergeber.get(0) == 0) {
 
-        }else if (Klammergeber.get(0)==1){
+        } else if (Klammergeber.get(0) == 1) {
             LogikAussage.add(")");
-            LogikAussage.add(3,"(");
-        }else if (Klammergeber.get(0)==2){
+            LogikAussage.add(3, "(");
+        } else if (Klammergeber.get(0) == 2) {
             LogikAussage.add(")");
-            LogikAussage.add(5,"(");
+            LogikAussage.add(5, "(");
         }
 
         /*LogikAussage.add(Negation.get(0));
@@ -476,22 +560,22 @@ public class NormalFormen extends AppCompatActivity {
         LogikAussage.add(Negation.get(0));          //9
         LogikAussage.add(Variable.get(3));          //10
 
-        if (LogikAussage.contains("<=>") || LogikAussage.contains("=>")){
+        if (LogikAussage.contains("<=>") || LogikAussage.contains("=>")) {
 
-            if ((LogikAussage.get(8).equals("<=>")||LogikAussage.get(8).equals("=>"))&&(LogikAussage.get(5).equals("<=>")||LogikAussage.get(5).equals("=>"))&&(LogikAussage.get(2).equals("<=>")||LogikAussage.get(2).equals("=>"))){
+            if ((LogikAussage.get(8).equals("<=>") || LogikAussage.get(8).equals("=>")) && (LogikAussage.get(5).equals("<=>") || LogikAussage.get(5).equals("=>")) && (LogikAussage.get(2).equals("<=>") || LogikAussage.get(2).equals("=>"))) {
                 LogikAussage.add(")");
                 LogikAussage.add(")");
-                LogikAussage.add(6,"(");
-                LogikAussage.add(3,"(");
-            }else if ((LogikAussage.get(8).equals("<=>")||LogikAussage.get(8).equals("=>"))&&(LogikAussage.get(5).equals("<=>")||LogikAussage.get(5).equals("=>"))){
+                LogikAussage.add(6, "(");
+                LogikAussage.add(3, "(");
+            } else if ((LogikAussage.get(8).equals("<=>") || LogikAussage.get(8).equals("=>")) && (LogikAussage.get(5).equals("<=>") || LogikAussage.get(5).equals("=>"))) {
                 LogikAussage.add(")");
-                LogikAussage.add(6,"(");
-            }else if ((LogikAussage.get(2).equals("<=>")||LogikAussage.get(2).equals("=>"))&&(LogikAussage.get(5).equals("<=>")||LogikAussage.get(5).equals("=>"))){
+                LogikAussage.add(6, "(");
+            } else if ((LogikAussage.get(2).equals("<=>") || LogikAussage.get(2).equals("=>")) && (LogikAussage.get(5).equals("<=>") || LogikAussage.get(5).equals("=>"))) {
                 LogikAussage.add(")");
-                LogikAussage.add(3,"(");
-            }else if ((LogikAussage.get(2).equals("<=>")||LogikAussage.get(2).equals("=>"))&&(LogikAussage.get(8).equals("<=>")||LogikAussage.get(8).equals("=>"))){
-                LogikAussage.add(5,")");
-                LogikAussage.add(0,"(");
+                LogikAussage.add(3, "(");
+            } else if ((LogikAussage.get(2).equals("<=>") || LogikAussage.get(2).equals("=>")) && (LogikAussage.get(8).equals("<=>") || LogikAussage.get(8).equals("=>"))) {
+                LogikAussage.add(5, ")");
+                LogikAussage.add(0, "(");
             }
         }
 
@@ -596,7 +680,6 @@ public class NormalFormen extends AppCompatActivity {
                 LogikAussage.add(")");
             }
         }*/
-
 
 
         for (int i = 0; i < LogikAussage.size(); i++) {
@@ -899,6 +982,8 @@ public class NormalFormen extends AppCompatActivity {
         und.setBackgroundColor(Color.BLUE);
         oder.setBackgroundColor(Color.BLUE);
         nicht.setBackgroundColor(Color.BLUE);
+        ButtonLoesung.setBackgroundColor(Color.BLUE);
+        Buttonnochmal.setBackgroundColor(Color.BLUE);
 
     }
 

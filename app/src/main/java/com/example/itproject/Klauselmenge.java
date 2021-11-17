@@ -232,6 +232,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬a","");
                         entferner = entferner.replaceAll("a","");
                         Teilkalkuel1.setText(entferner);
+                        erster.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -244,6 +245,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬a","");
                         entferner = entferner.replaceAll("a","");
                         Teilkalkuel2.setText(entferner);
+                        zweiter.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -256,6 +258,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬a","");
                         entferner = entferner.replaceAll("a","");
                         Teilkalkuel3.setText(entferner);
+                        dritter.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -268,6 +271,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬a","");
                         entferner = entferner.replaceAll("a","");
                         Teilkalkuel4.setText(entferner);
+                        vierter.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -280,6 +284,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬a","");
                         entferner = entferner.replaceAll("a","");
                         Teilkalkuel5.setText(entferner);
+                        fuenfter.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -311,6 +316,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬b","");
                         entferner = entferner.replaceAll("b","");
                         Teilkalkuel1.setText(entferner);
+                        erster.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -323,6 +329,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬b","");
                         entferner = entferner.replaceAll("b","");
                         Teilkalkuel2.setText(entferner);
+                        zweiter.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -335,6 +342,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬b","");
                         entferner = entferner.replaceAll("b","");
                         Teilkalkuel3.setText(entferner);
+                        dritter.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -347,6 +355,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬b","");
                         entferner = entferner.replaceAll("b","");
                         Teilkalkuel4.setText(entferner);
+                        vierter.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -359,6 +368,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬b","");
                         entferner = entferner.replaceAll("b","");
                         Teilkalkuel5.setText(entferner);
+                        fuenfter.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -390,6 +400,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬c","");
                         entferner = entferner.replaceAll("c","");
                         Teilkalkuel1.setText(entferner);
+                        erster.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -402,6 +413,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬c","");
                         entferner = entferner.replaceAll("c","");
                         Teilkalkuel2.setText(entferner);
+                        zweiter.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -414,6 +426,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬c","");
                         entferner = entferner.replaceAll("c","");
                         Teilkalkuel3.setText(entferner);
+                        dritter.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -426,6 +439,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬c","");
                         entferner = entferner.replaceAll("c","");
                         Teilkalkuel4.setText(entferner);
+                        vierter.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -438,6 +452,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         entferner = entferner.replaceAll("¬c","");
                         entferner = entferner.replaceAll("c","");
                         Teilkalkuel5.setText(entferner);
+                        fuenfter.setText(entferner);
                         entferner="";
                     }catch (Exception e){
 
@@ -696,6 +711,12 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                     Teilkalkuel3.setText(Endklausel.get(4));
                     Teilkalkuel4.setText(Endklausel.get(6));
                     Teilkalkuel5.setText(Endklausel.get(8));
+
+                    erster.setText(Endklausel.get(0));
+                    zweiter.setText(Endklausel.get(2));
+                    dritter.setText(Endklausel.get(4));
+                    vierter.setText(Endklausel.get(6));
+                    fuenfter.setText(Endklausel.get(8));
 
                     erster.setBackgroundColor(Color.RED);
                     fuerT1 = false;

@@ -267,8 +267,8 @@ public class AussagenLogik extends AppCompatActivity {
         Formeln.add("∃xv(x,x)");
 
 
-        Formeln.add("∀x(d(x)->s(x))");
-        Formeln.add("∀x(s(x)->(w(x)->t(x)))");
+        Formeln.add("∀x(v(x)->b(x))");
+        Formeln.add("∀x(v(x)->(b(x)->f(x)))");
         //Formeln.add("∃xd(x)");//Eigenkreation
 
         //Formel aus Klausur
@@ -303,8 +303,8 @@ public class AussagenLogik extends AppCompatActivity {
         Prädikate.add("v(x,y) - x I1 y");
         Prädikate.add("v(x,y) - x I1 y");
 
-        Prädikate.add("d(x) - x ist ein X1\ns(x) - x V1");
-        Prädikate.add("s(x) - x ist ein X1\nw(x) - x V1\nt(x) - x V2");
+        Prädikate.add("v(x) - x ist ein X1\nb(x) - x V1");
+        Prädikate.add("v(x) - x ist ein X1\nb(x) - x V1\nf(x) - x V2");
         //Prädikate.add("d(x) - x ist Z1"); //Eigenkreation
 
         //Prädikate aus Klausur
