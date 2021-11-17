@@ -12,7 +12,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 public class AussagenLogik extends AppCompatActivity {
@@ -20,22 +28,38 @@ public class AussagenLogik extends AppCompatActivity {
     public Button z, v, klammerauf, klammerzu, mindestensein, f, komma, und, g, implikation, b, nicht, loeschen, bestaetigen, weiter, fueralle, x, y;
     TextView AussagenAufgabe, AussagenAntwort;
 
+    private static final String FILE_NAME = "Auswertung.txt";
+
+    private static String Benutzername = "Benutzername";
+    private static String annehmer = "";
+
     public static String LogikFormelString;
     public static String LogikAussageString;
     public static String LogikPrädikateString;
+
+    public static Date Anfangszeit;
+    public static Date Endzeit;
 
     public static ArrayList<String> LogikFormeln = new ArrayList<>();
     public static ArrayList<String> AussageString = new ArrayList<>();
     public static ArrayList<String> LogikString = new ArrayList<>();
 
     public static int fragenzaehler = 0;
+    public static int generiertePraedikate = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_aussagen_logik);
+
+        Anfangszeit = null;
+        Endzeit = null;
+
+        Anfangszeit = Calendar.getInstance().getTime();
+        generiertePraedikate = 0;
+        generiertePraedikate++;
 
         z = (Button) findViewById(R.id.button24);
         v = (Button) findViewById(R.id.button13);
@@ -213,12 +237,15 @@ public class AussagenLogik extends AppCompatActivity {
                 if (fragenzaehler < 2) {
                     AussagenAntwort.setText("");
                     fragenzaehler++;
+                    generiertePraedikate++;
                     AussagenAufgabe.setText("Formalisieren Sie die folgende Aussage: \n" + AussageString.get(fragenzaehler) + "\nmit folgenden Prädikaten\n" + LogikString.get(fragenzaehler));
                     weiter.setVisibility(View.INVISIBLE);
                     bestaetigen.setVisibility(View.VISIBLE);
 
-                }else {
+                } else {
                     fragenzaehler = 0;
+                    Endzeit = Calendar.getInstance().getTime();
+                    speichern();
                     activityWechsel();
                     finish();
 
@@ -510,30 +537,31 @@ public class AussagenLogik extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.spiel_menu2,menu);
+        getMenuInflater().inflate(R.menu.spiel_menu2, menu);
         return true;
     }
+
     //Für Neustart und Endscreen, es werden verschiedene Dinge resettet
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         try {
-            switch (item.getItemId()){
+            switch (item.getItemId()) {
                 case R.id.cancel2:
-                    fragenzaehler=0;
+                    fragenzaehler = 0;
                     activityWechsel();
                     finish();
                     break;
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void ButtonBlaumacher(){
+    public void ButtonBlaumacher() {
 
         z.setBackgroundColor(Color.BLUE);
         v.setBackgroundColor(Color.BLUE);
@@ -553,6 +581,66 @@ public class AussagenLogik extends AppCompatActivity {
         x.setBackgroundColor(Color.BLUE);
         y.setBackgroundColor(Color.BLUE);
         bestaetigen.setBackgroundColor(Color.BLUE);
+    }
+
+    //Die Methoden speichern() und laden() sind übernommen von https://gist.github.com/codinginflow/6c13bd0d08416115798f17d45b5d8056
+
+    public void speichern() {
+        laden();
+
+        String text = annehmer + "UserID|" + Benutzername + ";Activity|Praedikatenlogik;Anfangszeit|" + Anfangszeit + ";Endzeit|" + Endzeit + ";\n";
+
+        FileOutputStream fos = null;
+
+        try {
+            fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
+            fos.write(text.getBytes());
+
+
+            //Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME, Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void laden() {
+        FileInputStream fis = null;
+
+        try {
+            fis = openFileInput(FILE_NAME);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String text;
+
+            while ((text = br.readLine()) != null) {
+                sb.append(text).append("\n");
+            }
+
+            annehmer = sb.toString();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }

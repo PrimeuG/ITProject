@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,16 +20,33 @@ import org.logicng.io.parsers.PropositionalParser;
 import org.logicng.transformations.dnf.DNFFactorization;
 import org.mvel2.MVEL;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 public class Junktoren extends AppCompatActivity {
+
+    private static final String FILE_NAME = "Auswertung.txt";
+
+    private static String Benutzername = "Benutzername";
+    private static String annehmer = "";
 
     public static String Aussage;
     public static String ParserText = "";
     public static String ergebnis = "";
 
+    public static Date Anfangszeit;
+    public static Date Endzeit;
+
     public static int fragenanzahl = 0;
+    public static int punkte;
 
     Button erfuellbar, nichterfuellbar, weiter;
 
@@ -37,9 +55,15 @@ public class Junktoren extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_junktoren);
 
+
+        Anfangszeit = null;
+        Endzeit = null;
+
+        Anfangszeit = Calendar.getInstance().getTime();
+        punkte = 0;
 
         TextView Junktorenterm, AussagenTerm;
 
@@ -57,17 +81,18 @@ public class Junktoren extends AppCompatActivity {
         ueberpruefen();
 
         Junktorenterm.setText("Ist die Aussage: \n" + Aussage + "\nin der unten beschriebenen Konstellation lösbar? ");
-        AussagenTerm.setText("a = "+ Booluebernehmer.get(0) +" b = "+ Booluebernehmer.get(1) +" c = "+ Booluebernehmer.get(2) );
+        AussagenTerm.setText("a = " + Booluebernehmer.get(0) + " b = " + Booluebernehmer.get(1) + " c = " + Booluebernehmer.get(2));
 
         weiter.setVisibility(View.INVISIBLE);
 
         erfuellbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(ergebnis.equals("true")){
+                if (ergebnis.equals("true")) {
                     erfuellbar.setBackgroundColor(Color.GREEN);
                     nichterfuellbar.setBackgroundColor(Color.RED);
-                }else {
+                    punkte++;
+                } else {
                     erfuellbar.setBackgroundColor(Color.RED);
                     nichterfuellbar.setBackgroundColor(Color.GREEN);
                 }
@@ -79,12 +104,13 @@ public class Junktoren extends AppCompatActivity {
         nichterfuellbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(ergebnis.equals("true")){
+                if (ergebnis.equals("true")) {
                     erfuellbar.setBackgroundColor(Color.GREEN);
                     nichterfuellbar.setBackgroundColor(Color.RED);
-                }else {
+                } else {
                     erfuellbar.setBackgroundColor(Color.RED);
                     nichterfuellbar.setBackgroundColor(Color.GREEN);
+                    punkte++;
                 }
                 weiter.setVisibility(View.VISIBLE);
             }
@@ -93,7 +119,7 @@ public class Junktoren extends AppCompatActivity {
         weiter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(fragenanzahl < 9){
+                if (fragenanzahl < 9) {
                     fragenanzahl++;
                     Booluebernehmer.clear();
                     AussagenTerm.setText("");
@@ -105,10 +131,12 @@ public class Junktoren extends AppCompatActivity {
                     dreierTerm();
                     ueberpruefen();
                     Junktorenterm.setText("Ist die Aussage: \n" + Aussage + "\nin der unten beschriebenen Konstellation lösbar? ");
-                    AussagenTerm.setText("a = "+ Booluebernehmer.get(0) +" b = "+ Booluebernehmer.get(1) +" c = "+ Booluebernehmer.get(2) );
+                    AussagenTerm.setText("a = " + Booluebernehmer.get(0) + " b = " + Booluebernehmer.get(1) + " c = " + Booluebernehmer.get(2));
                     weiter.setVisibility(View.INVISIBLE);
-                }else {
+                } else {
                     fragenanzahl = 0;
+                    Endzeit = Calendar.getInstance().getTime();
+                    speichern();
                     activityWechsel();
                     finish();
                 }
@@ -119,7 +147,7 @@ public class Junktoren extends AppCompatActivity {
 
     }
 
-    public void dreierTerm(){
+    public void dreierTerm() {
 
         ParserText = "";
 
@@ -162,17 +190,17 @@ public class Junktoren extends AppCompatActivity {
         LogikAussage.add(Junktoren.get(0));
         Collections.shuffle(Negation);
         LogikAussage.add(Negation.get(0));
-        if(!LogikAussage.contains("(")){
+        if (!LogikAussage.contains("(")) {
             Collections.shuffle(offeneKlammer);
             LogikAussage.add(offeneKlammer.get(0));
-            if (LogikAussage.contains("(")){
+            if (LogikAussage.contains("(")) {
                 Collections.shuffle(Negation);
                 LogikAussage.add(Negation.get(0));
             }
         }
         LogikAussage.add(Variable.get(1));
-        if (LogikAussage.contains("(")){
-            if(LogikAussage.indexOf("(")==1){
+        if (LogikAussage.contains("(")) {
+            if (LogikAussage.indexOf("(") == 1) {
                 LogikAussage.add(")");
             }
         }
@@ -181,37 +209,37 @@ public class Junktoren extends AppCompatActivity {
         Collections.shuffle(Negation);
         LogikAussage.add(Negation.get(0));
         LogikAussage.add(Variable.get(2));
-        if(LogikAussage.contains("(")){
-            if (LogikAussage.indexOf("(") > 1){
+        if (LogikAussage.contains("(")) {
+            if (LogikAussage.indexOf("(") > 1) {
                 LogikAussage.add(")");
             }
         }
 
-        for(int i = 0 ; i < LogikAussage.size(); i++){
-            ParserText+=LogikAussage.get(i);
+        for (int i = 0; i < LogikAussage.size(); i++) {
+            ParserText += LogikAussage.get(i);
         }
 
         Aussage = ParserText;
 
-        if(LogikAussage.contains("=>")){
-            Aussage = Aussage.replaceAll("=>","->");
+        if (LogikAussage.contains("=>")) {
+            Aussage = Aussage.replaceAll("=>", "->");
         }
-        if (LogikAussage.contains("<=>")){
-            Aussage = Aussage.replaceAll("<=>","<->");
+        if (LogikAussage.contains("<=>")) {
+            Aussage = Aussage.replaceAll("<=>", "<->");
         }
-        if (LogikAussage.contains("&")){
-            Aussage = Aussage.replaceAll("&","∧");
+        if (LogikAussage.contains("&")) {
+            Aussage = Aussage.replaceAll("&", "∧");
         }
-        if (LogikAussage.contains("|")){
-            Aussage = Aussage.replaceAll("\\|","∨");
+        if (LogikAussage.contains("|")) {
+            Aussage = Aussage.replaceAll("\\|", "∨");
         }
-        if (LogikAussage.contains("~")){
-            Aussage = Aussage.replaceAll("~","¬");
+        if (LogikAussage.contains("~")) {
+            Aussage = Aussage.replaceAll("~", "¬");
         }
 
     }
 
-    public void ueberpruefen(){
+    public void ueberpruefen() {
 
         ArrayList<Boolean> Randombooler = new ArrayList<Boolean>();
         Randombooler.clear();
@@ -224,31 +252,31 @@ public class Junktoren extends AppCompatActivity {
             final PropositionalParser p = new PropositionalParser(f);
             final Formula formula = p.parse(ParserText);
             final DNFFactorization dnfFactorization = new DNFFactorization();
-            Formula DNFFORM = dnfFactorization.apply(formula,true);
+            Formula DNFFORM = dnfFactorization.apply(formula, true);
             String DNFinSTRING = DNFFORM.toString();
-            if(DNFinSTRING.contains("~")){
-                DNFinSTRING=DNFinSTRING.replaceAll("~", "!");
+            if (DNFinSTRING.contains("~")) {
+                DNFinSTRING = DNFinSTRING.replaceAll("~", "!");
             }
-            if(DNFinSTRING.contains("|")){
-                DNFinSTRING=DNFinSTRING.replaceAll("\\|", "||");
+            if (DNFinSTRING.contains("|")) {
+                DNFinSTRING = DNFinSTRING.replaceAll("\\|", "||");
             }
-            if(DNFinSTRING.contains("&")){
-                DNFinSTRING=DNFinSTRING.replaceAll("&", "&&");
+            if (DNFinSTRING.contains("&")) {
+                DNFinSTRING = DNFinSTRING.replaceAll("&", "&&");
             }
-            if(DNFinSTRING.contains("a")){
+            if (DNFinSTRING.contains("a")) {
                 Collections.shuffle(Randombooler);
                 Booluebernehmer.add(Randombooler.get(0));
-                DNFinSTRING=DNFinSTRING.replaceAll("a", Randombooler.get(0).toString());
+                DNFinSTRING = DNFinSTRING.replaceAll("a", Randombooler.get(0).toString());
             }
-            if(DNFinSTRING.contains("b")){
+            if (DNFinSTRING.contains("b")) {
                 Collections.shuffle(Randombooler);
                 Booluebernehmer.add(Randombooler.get(0));
-                DNFinSTRING=DNFinSTRING.replaceAll("b",Randombooler.get(0).toString());
+                DNFinSTRING = DNFinSTRING.replaceAll("b", Randombooler.get(0).toString());
             }
-            if(DNFinSTRING.contains("c")){
+            if (DNFinSTRING.contains("c")) {
                 Collections.shuffle(Randombooler);
                 Booluebernehmer.add(Randombooler.get(0));
-                DNFinSTRING=DNFinSTRING.replaceAll("c",Randombooler.get(0).toString());
+                DNFinSTRING = DNFinSTRING.replaceAll("c", Randombooler.get(0).toString());
             }
 
             String finalParser = DNFinSTRING;
@@ -266,16 +294,17 @@ public class Junktoren extends AppCompatActivity {
     }
 
 
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.spiel_menu2,menu);
+        getMenuInflater().inflate(R.menu.spiel_menu2, menu);
         return true;
     }
+
     //Für Neustart und Endscreen, es werden verschiedene Dinge resettet
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         try {
-            switch (item.getItemId()){
+            switch (item.getItemId()) {
                 case R.id.cancel2:
                     fragenanzahl = 0;
                     activityWechsel();
@@ -283,20 +312,80 @@ public class Junktoren extends AppCompatActivity {
                     break;
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void ButtonBlaumacher(){
+    public void ButtonBlaumacher() {
 
         erfuellbar.setBackgroundColor(Color.BLUE);
         nichterfuellbar.setBackgroundColor(Color.BLUE);
         weiter.setBackgroundColor(Color.BLUE);
 
 
+    }
 
+    //Die Methoden speichern() und laden() sind übernommen von https://gist.github.com/codinginflow/6c13bd0d08416115798f17d45b5d8056
+
+    public void speichern() {
+        laden();
+
+        String text = annehmer + "UserID|" + Benutzername + ";Activity|Junktoren;Anfangszeit|" + Anfangszeit + ";Endzeit|" + Endzeit + ";Punkte|" + punkte + "von10;\n";
+
+        FileOutputStream fos = null;
+
+        try {
+            fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
+            fos.write(text.getBytes());
+
+
+            //Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME, Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void laden(){
+        FileInputStream fis = null;
+
+        try {
+            fis = openFileInput(FILE_NAME);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String text;
+
+            while ((text = br.readLine()) != null) {
+                sb.append(text).append("\n");
+            }
+
+            annehmer = sb.toString();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }
+

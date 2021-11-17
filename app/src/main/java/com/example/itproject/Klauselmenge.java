@@ -20,8 +20,16 @@ import org.logicng.io.parsers.PropositionalParser;
 import org.logicng.solvers.MiniSat;
 import org.logicng.solvers.SATSolver;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 public class Klauselmenge extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,6 +45,11 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
     ArrayList<String> EinzelKlausel = new ArrayList<>();
     ArrayList<String> Mehrfachklausel = new ArrayList<>();
 
+    private static final String FILE_NAME = "Auswertung.txt";
+
+    private static String Benutzername = "Benutzername";
+    private static String annehmer = "";
+
     public static boolean fuerT1 = false;
     public static boolean fuerT2 = false;
     public static boolean fuerT3 = false;
@@ -47,10 +60,12 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
     public static String ParserText = "";
     public static String Klauselmenge = "";
     public static String ParserTexte = "";
-    public static String warter = "";
-    public static int farbe;
-    public static int antwort = 0;
+
+    public static int punkte = 0;
     public static int maxfragen = 10;
+
+    public static Date Anfangszeit;
+    public static Date Endzeit;
 
     int EinzelklauselStopper = 0;
 
@@ -60,6 +75,12 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_klauselmenge);
+
+        Anfangszeit = null;
+        Endzeit = null;
+        Anfangszeit = Calendar.getInstance().getTime();
+
+        punkte = 0;
 
         if (savedInstanceState == null) {
             fragenanzahl = 0;
@@ -482,8 +503,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
                         erfuellbar.setBackgroundColor(Color.GREEN);
                         nichtErfuellbar.setBackgroundColor(Color.RED);
-
-                        // Buttonzuruecksteller();
+                        punkte++;
 
                     } else {
                         erfuellbar.setBackgroundColor(Color.RED);
@@ -492,6 +512,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                 } catch (ParserException e) {
                     e.printStackTrace();
                 }
+
                 elf.setVisibility(View.VISIBLE);
                 break;
 
@@ -504,6 +525,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                     } else {
                         erfuellbar.setBackgroundColor(Color.RED);
                         nichtErfuellbar.setBackgroundColor(Color.GREEN);
+                        punkte++;
                     }
                 } catch (ParserException e) {
                     e.printStackTrace();
@@ -516,6 +538,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                     fragenanzahl++;
                     if (fragenanzahl < maxfragen) {
                         ParserTexte = "";
+                        Endzeit = Calendar.getInstance().getTime();
                         Klauselerstellen();
                         textersteller();
                         Buttonzuruecksteller();
@@ -528,6 +551,8 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
         if (fragenanzahl >= maxfragen) {
             fragenanzahl=0;
+            Endzeit = Calendar.getInstance().getTime();
+            speichern();
             activityWechsel();
             finish();
         }
@@ -748,6 +773,66 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         a.setBackgroundColor(Color.BLUE);
         b.setBackgroundColor(Color.BLUE);
         c.setBackgroundColor(Color.BLUE);
+    }
+
+    //Die Methoden speichern() und laden() sind übernommen von https://gist.github.com/codinginflow/6c13bd0d08416115798f17d45b5d8056
+
+    public void speichern() {
+        laden();
+
+        String text = annehmer + "UserID|" + Benutzername + ";Activity|Klauselmengen;Anfangszeit|" + Anfangszeit + ";Endzeit|" + Endzeit + ";Punkte|" + punkte + "von10;\n";
+
+        FileOutputStream fos = null;
+
+        try {
+            fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
+            fos.write(text.getBytes());
+
+
+            //Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME, Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void laden(){
+        FileInputStream fis = null;
+
+        try {
+            fis = openFileInput(FILE_NAME);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String text;
+
+            while ((text = br.readLine()) != null) {
+                sb.append(text).append("\n");
+            }
+
+            annehmer = sb.toString();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }

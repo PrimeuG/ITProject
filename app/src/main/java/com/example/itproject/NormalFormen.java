@@ -21,10 +21,23 @@ import org.logicng.solvers.SATSolver;
 import org.logicng.transformations.dnf.DNFFactorization;
 import org.mvel2.MVEL;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 public class NormalFormen extends AppCompatActivity {
+
+    private static final String FILE_NAME = "Auswertung.txt";
+
+    private static String Benutzername = "Benutzername";
+    private static String annehmer = "";
 
     public static String Aussage;
     public static String ParserText = "";
@@ -35,6 +48,11 @@ public class NormalFormen extends AppCompatActivity {
 
     ArrayList<Boolean> DNFKNFGenerator = new ArrayList<>();
     ArrayList<String> pruefListeErgebnis = new ArrayList<>();
+
+    public static Date Anfangszeit;
+    public static Date Endzeit;
+
+    public static int punkte = 0;
 
 
     public static int schwierigkeitsgrad;
@@ -49,6 +67,12 @@ public class NormalFormen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_normal_formen);
+
+        Anfangszeit = null;
+        Endzeit = null;
+        punkte = 0;
+
+        Anfangszeit = Calendar.getInstance().getTime();
 
         TextView text = findViewById(R.id.textView7);
         TextView unterertext = findViewById(R.id.textView8);
@@ -73,7 +97,7 @@ public class NormalFormen extends AppCompatActivity {
 
         ButtonBlaumacher();
 
-        schwierigkeitsgrad = 2;
+        schwierigkeitsgrad = 0;
         fragenanzahl = 0;
         weiter.setVisibility(View.INVISIBLE);
         ButtonLoesung.setVisibility(View.INVISIBLE);
@@ -176,40 +200,53 @@ public class NormalFormen extends AppCompatActivity {
                 if (schwierigkeitsgrad == 0) {
                     if (pruefListeErgebnis.contains("false")) {
                         schwierigkeitsgrad = 0;
-                        bestaetigen.setBackgroundColor(Color.RED);
+                        weiter.setBackgroundColor(Color.RED);
+                        Buttonnochmal.setVisibility(View.VISIBLE);
+                        ButtonLoesung.setVisibility(View.VISIBLE);
                     } else if (pruefListeErgebnis.contains("true")) {
                         schwierigkeitsgrad = 1;
-                        bestaetigen.setBackgroundColor(Color.GREEN);
+                        weiter.setBackgroundColor(Color.GREEN);
+                        punkte++;
                     } else {
                         schwierigkeitsgrad = 0;
-                        bestaetigen.setBackgroundColor(Color.RED);
+                        weiter.setBackgroundColor(Color.RED);
+                        Buttonnochmal.setVisibility(View.VISIBLE);
+                        ButtonLoesung.setVisibility(View.VISIBLE);
                     }
                 } else if (schwierigkeitsgrad == 1) {
                     if (pruefListeErgebnis.contains("false")) {
                         schwierigkeitsgrad = 0;
-                        bestaetigen.setBackgroundColor(Color.RED);
+                        weiter.setBackgroundColor(Color.RED);
+                        Buttonnochmal.setVisibility(View.VISIBLE);
+                        ButtonLoesung.setVisibility(View.VISIBLE);
                     } else if (pruefListeErgebnis.contains("true")) {
                         schwierigkeitsgrad = 2;
-                        bestaetigen.setBackgroundColor(Color.GREEN);
+                        punkte++;
+                        weiter.setBackgroundColor(Color.GREEN);
                     } else {
                         schwierigkeitsgrad = 0;
-                        bestaetigen.setBackgroundColor(Color.RED);
+                        weiter.setBackgroundColor(Color.RED);
+                        Buttonnochmal.setVisibility(View.VISIBLE);
+                        ButtonLoesung.setVisibility(View.VISIBLE);
                     }
                 } else {
                     if (pruefListeErgebnis.contains("false")) {
-                        //schwierigkeitsgrad = 1;
-                        bestaetigen.setBackgroundColor(Color.RED);
+                        schwierigkeitsgrad = 1;
+                        weiter.setBackgroundColor(Color.RED);
+                        Buttonnochmal.setVisibility(View.VISIBLE);
+                        ButtonLoesung.setVisibility(View.VISIBLE);
                     } else if (pruefListeErgebnis.contains("true")) {
-                        bestaetigen.setBackgroundColor(Color.GREEN);
+                        weiter.setBackgroundColor(Color.GREEN);
+                        punkte++;
                     } else {
-                        //schwierigkeitsgrad = 1;
-                        bestaetigen.setBackgroundColor(Color.RED);
+                        schwierigkeitsgrad = 1;
+                        weiter.setBackgroundColor(Color.RED);
+                        Buttonnochmal.setVisibility(View.VISIBLE);
+                        ButtonLoesung.setVisibility(View.VISIBLE);
                     }
 
                 }
                 weiter.setVisibility(View.VISIBLE);
-                Buttonnochmal.setVisibility(View.VISIBLE);
-                ButtonLoesung.setVisibility(View.VISIBLE);
                 a.setVisibility(View.INVISIBLE);
                 b.setVisibility(View.INVISIBLE);
                 c.setVisibility(View.INVISIBLE);
@@ -220,6 +257,7 @@ public class NormalFormen extends AppCompatActivity {
                 nicht.setVisibility(View.INVISIBLE);
                 klammerauf.setVisibility(View.INVISIBLE);
                 klammerzu.setVisibility(View.INVISIBLE);
+                bestaetigen.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -255,9 +293,12 @@ public class NormalFormen extends AppCompatActivity {
                     nicht.setVisibility(View.VISIBLE);
                     klammerauf.setVisibility(View.VISIBLE);
                     klammerzu.setVisibility(View.VISIBLE);
+                    bestaetigen.setVisibility(View.VISIBLE);
                 } else {
                     fragenanzahl = 0;
                     schwierigkeitsgrad = 0;
+                    Endzeit = Calendar.getInstance().getTime();
+                    speichern();
                     activityWechsel();
                     finish();
                 }
@@ -985,6 +1026,66 @@ public class NormalFormen extends AppCompatActivity {
         ButtonLoesung.setBackgroundColor(Color.BLUE);
         Buttonnochmal.setBackgroundColor(Color.BLUE);
 
+    }
+
+    //Die Methoden speichern() und laden() sind übernommen von https://gist.github.com/codinginflow/6c13bd0d08416115798f17d45b5d8056
+
+    public void speichern() {
+        laden();
+
+        String text = annehmer + "UserID|" + Benutzername + ";Activity|NormalFormen;Anfangszeit|" + Anfangszeit + ";Endzeit|" + Endzeit + ";Punkte|" + punkte + "von5;\n";
+
+        FileOutputStream fos = null;
+
+        try {
+            fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
+            fos.write(text.getBytes());
+
+
+            //Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME, Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void laden(){
+        FileInputStream fis = null;
+
+        try {
+            fis = openFileInput(FILE_NAME);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String text;
+
+            while ((text = br.readLine()) != null) {
+                sb.append(text).append("\n");
+            }
+
+            annehmer = sb.toString();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }
