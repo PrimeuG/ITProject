@@ -302,12 +302,14 @@ public class NormalFormen extends AppCompatActivity {
         ArrayList<String> Negation = new ArrayList<String>();
         ArrayList<String> offeneKlammer = new ArrayList<String>();
         ArrayList<String> Variable = new ArrayList<String>();
+        ArrayList<Integer> Klammergeber = new ArrayList<Integer>();
 
         LogikAussage.clear();
         Junktoren.clear();
         Negation.clear();
         Variable.clear();
         offeneKlammer.clear();
+        Klammergeber.clear();
 
         Junktoren.add("=>");
         Junktoren.add("<=>");
@@ -320,13 +322,45 @@ public class NormalFormen extends AppCompatActivity {
         Variable.add("a");
         Variable.add("b");
         Variable.add("c");
+        Klammergeber.add(0);
+        Klammergeber.add(1);
+        Klammergeber.add(2);
 
         Collections.shuffle(Junktoren);
         Collections.shuffle(Negation);
         Collections.shuffle(Variable);
         Collections.shuffle(offeneKlammer);
+        Collections.shuffle(Klammergeber);
 
-        LogikAussage.add(Negation.get(0));
+
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));          //0
+        LogikAussage.add(Variable.get(0));          //1
+        Collections.shuffle(Junktoren);
+        LogikAussage.add(Junktoren.get(0));          //2
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));          //3
+        LogikAussage.add(Variable.get(1));          //4
+        Collections.shuffle(Junktoren);
+        LogikAussage.add(Junktoren.get(0));          //5
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));          //6
+        LogikAussage.add(Variable.get(2));          //7
+
+        if ((LogikAussage.get(2).equals("<=>")||LogikAussage.get(2).equals("=>"))&&(LogikAussage.get(5).equals("<=>")||LogikAussage.get(5).equals("=>"))){
+            LogikAussage.add(3,"(");
+            LogikAussage.add(")");
+        }else if (Klammergeber.get(0)==0){
+
+        }else if (Klammergeber.get(0)==1){
+            LogikAussage.add(")");
+            LogikAussage.add(3,"(");
+        }else if (Klammergeber.get(0)==2){
+            LogikAussage.add(")");
+            LogikAussage.add(5,"(");
+        }
+
+        /*LogikAussage.add(Negation.get(0));
         LogikAussage.add(offeneKlammer.get(0));
         if (LogikAussage.contains("(")) {
             Collections.shuffle(Negation);
@@ -359,7 +393,7 @@ public class NormalFormen extends AppCompatActivity {
             if (LogikAussage.indexOf("(") > 1) {
                 LogikAussage.add(")");
             }
-        }
+        }*/
 
         for (int i = 0; i < LogikAussage.size(); i++) {
             ParserText += LogikAussage.get(i);
