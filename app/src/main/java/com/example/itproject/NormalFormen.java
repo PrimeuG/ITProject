@@ -52,7 +52,12 @@ public class NormalFormen extends AppCompatActivity {
     public static Date Anfangszeit;
     public static Date Endzeit;
 
-    public static int punkte = 0;
+    public static int schwierigkeitsgradpunkte1 = 0;
+    public static int schwierigkeitsgradpunkte2 = 0;
+    public static int schwierigkeitsgradpunkte3 = 0;
+    public static int schwierigkeitsgradfrage1 = 0;
+    public static int schwierigkeitsgradfrage2 = 0;
+    public static int schwierigkeitsgradfrage3 = 0;
 
 
     public static int schwierigkeitsgrad;
@@ -70,7 +75,6 @@ public class NormalFormen extends AppCompatActivity {
 
         Anfangszeit = null;
         Endzeit = null;
-        punkte = 0;
 
         Anfangszeit = Calendar.getInstance().getTime();
 
@@ -204,9 +208,16 @@ public class NormalFormen extends AppCompatActivity {
                         Buttonnochmal.setVisibility(View.VISIBLE);
                         ButtonLoesung.setVisibility(View.VISIBLE);
                     } else if (pruefListeErgebnis.contains("true")) {
-                        schwierigkeitsgrad = 1;
+
                         weiter.setBackgroundColor(Color.GREEN);
-                        punkte++;
+                        if (schwierigkeitsgrad == 0){
+                            schwierigkeitsgradpunkte1++;
+                        }else if (schwierigkeitsgrad == 1){
+                            schwierigkeitsgradpunkte2++;
+                        }else if (schwierigkeitsgrad == 2){
+                            schwierigkeitsgradpunkte3++;
+                        }
+                        schwierigkeitsgrad = 1;
                     } else {
                         schwierigkeitsgrad = 0;
                         weiter.setBackgroundColor(Color.RED);
@@ -220,8 +231,15 @@ public class NormalFormen extends AppCompatActivity {
                         Buttonnochmal.setVisibility(View.VISIBLE);
                         ButtonLoesung.setVisibility(View.VISIBLE);
                     } else if (pruefListeErgebnis.contains("true")) {
+
+                        if (schwierigkeitsgrad == 0){
+                            schwierigkeitsgradpunkte1++;
+                        }else if (schwierigkeitsgrad == 1){
+                            schwierigkeitsgradpunkte2++;
+                        }else if (schwierigkeitsgrad == 2){
+                            schwierigkeitsgradpunkte3++;
+                        }
                         schwierigkeitsgrad = 2;
-                        punkte++;
                         weiter.setBackgroundColor(Color.GREEN);
                     } else {
                         schwierigkeitsgrad = 0;
@@ -237,7 +255,13 @@ public class NormalFormen extends AppCompatActivity {
                         ButtonLoesung.setVisibility(View.VISIBLE);
                     } else if (pruefListeErgebnis.contains("true")) {
                         weiter.setBackgroundColor(Color.GREEN);
-                        punkte++;
+                        if (schwierigkeitsgrad == 0){
+                            schwierigkeitsgradpunkte1++;
+                        }else if (schwierigkeitsgrad == 1){
+                            schwierigkeitsgradpunkte2++;
+                        }else if (schwierigkeitsgrad == 2){
+                            schwierigkeitsgradpunkte3++;
+                        }
                     } else {
                         schwierigkeitsgrad = 1;
                         weiter.setBackgroundColor(Color.RED);
@@ -783,10 +807,13 @@ public class NormalFormen extends AppCompatActivity {
     public void schwierigkeit(int Schwierigkeit) {
         if (Schwierigkeit == 0) {
             zweierTerm();
+            schwierigkeitsgradfrage1++;
         } else if (Schwierigkeit == 1) {
             dreierTerm();
+            schwierigkeitsgradfrage2++;
         } else if (Schwierigkeit == 2) {
             viererTerm();
+            schwierigkeitsgradfrage3++;
         }
     }
 
@@ -1033,7 +1060,7 @@ public class NormalFormen extends AppCompatActivity {
     public void speichern() {
         laden();
 
-        String text = annehmer + "UserID|" + Benutzername + ";Activity|NormalFormen;Anfangszeit|" + Anfangszeit + ";Endzeit|" + Endzeit + ";Punkte|" + punkte + "von5;\n";
+        String text = annehmer + "UserID|" + Benutzername + ";Activity|NormalFormen;Anfangszeit|" + Anfangszeit + ";Endzeit|" + Endzeit + ";PunkteS1|" + schwierigkeitsgradpunkte1 + " von" + schwierigkeitsgradfrage1 + ";PunkteS2|" + schwierigkeitsgradpunkte2 + " von" + schwierigkeitsgradfrage2 + ";PunkteS3|" + schwierigkeitsgradpunkte3 + " von" + schwierigkeitsgradfrage3 + ";\n";
 
         FileOutputStream fos = null;
 

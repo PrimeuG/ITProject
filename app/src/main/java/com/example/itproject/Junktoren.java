@@ -48,7 +48,16 @@ public class Junktoren extends AppCompatActivity {
     public static int fragenanzahl = 0;
     public static int punkte;
 
+    public static int schwierigkeitsgrad = 0;
+    public static int schwierigkeitsgradpunkte1 = 0;
+    public static int schwierigkeitsgradpunkte2 = 0;
+    public static int schwierigkeitsgradpunkte3 = 0;
+    public static int schwierigkeitsgradfrage1 = 0;
+    public static int schwierigkeitsgradfrage2 = 0;
+    public static int schwierigkeitsgradfrage3 = 0;
+
     Button erfuellbar, nichterfuellbar, weiter;
+    TextView Junktorenterm, AussagenTerm;
 
     ArrayList<Boolean> Booluebernehmer = new ArrayList<>();
 
@@ -65,7 +74,7 @@ public class Junktoren extends AppCompatActivity {
         Anfangszeit = Calendar.getInstance().getTime();
         punkte = 0;
 
-        TextView Junktorenterm, AussagenTerm;
+
 
         erfuellbar = (Button) findViewById(R.id.button28);
         nichterfuellbar = (Button) findViewById(R.id.button29);
@@ -77,11 +86,12 @@ public class Junktoren extends AppCompatActivity {
         ButtonBlaumacher();
 
         fragenanzahl = 0;
-        dreierTerm();
-        ueberpruefen();
+
+
+        schwierigkeit(schwierigkeitsgrad);
+
 
         Junktorenterm.setText("Ist die Aussage: \n" + Aussage + "\nin der unten beschriebenen Konstellation lösbar? ");
-        AussagenTerm.setText("a = " + Booluebernehmer.get(0) + " b = " + Booluebernehmer.get(1) + " c = " + Booluebernehmer.get(2));
 
         weiter.setVisibility(View.INVISIBLE);
 
@@ -91,10 +101,22 @@ public class Junktoren extends AppCompatActivity {
                 if (ergebnis.equals("true")) {
                     erfuellbar.setBackgroundColor(Color.GREEN);
                     nichterfuellbar.setBackgroundColor(Color.RED);
-                    punkte++;
+                    if (schwierigkeitsgrad == 0){
+                        schwierigkeitsgradpunkte1++;
+                    }else if (schwierigkeitsgrad == 1){
+                        schwierigkeitsgradpunkte2++;
+                    }else if (schwierigkeitsgrad == 2){
+                        schwierigkeitsgradpunkte3++;
+                    }
+                    if (schwierigkeitsgrad < 2){
+                        schwierigkeitsgrad++;
+                    }
                 } else {
                     erfuellbar.setBackgroundColor(Color.RED);
                     nichterfuellbar.setBackgroundColor(Color.GREEN);
+                    if (schwierigkeitsgrad > 0){
+                        schwierigkeitsgrad--;
+                    }
                 }
 
                 weiter.setVisibility(View.VISIBLE);
@@ -107,10 +129,22 @@ public class Junktoren extends AppCompatActivity {
                 if (ergebnis.equals("true")) {
                     erfuellbar.setBackgroundColor(Color.GREEN);
                     nichterfuellbar.setBackgroundColor(Color.RED);
+                    if (schwierigkeitsgrad > 0){
+                        schwierigkeitsgrad--;
+                    }
                 } else {
                     erfuellbar.setBackgroundColor(Color.RED);
                     nichterfuellbar.setBackgroundColor(Color.GREEN);
-                    punkte++;
+                    if (schwierigkeitsgrad == 0){
+                        schwierigkeitsgradpunkte1++;
+                    }else if (schwierigkeitsgrad == 1){
+                        schwierigkeitsgradpunkte2++;
+                    }else if (schwierigkeitsgrad == 2){
+                        schwierigkeitsgradpunkte3++;
+                    }
+                    if (schwierigkeitsgrad < 2){
+                        schwierigkeitsgrad++;
+                    }
                 }
                 weiter.setVisibility(View.VISIBLE);
             }
@@ -128,15 +162,22 @@ public class Junktoren extends AppCompatActivity {
                     ParserText = "";
                     erfuellbar.setBackgroundColor(Color.BLUE);
                     nichterfuellbar.setBackgroundColor(Color.BLUE);
-                    dreierTerm();
-                    ueberpruefen();
+                    schwierigkeit(schwierigkeitsgrad);
+                 //   ueberpruefen();
                     Junktorenterm.setText("Ist die Aussage: \n" + Aussage + "\nin der unten beschriebenen Konstellation lösbar? ");
-                    AussagenTerm.setText("a = " + Booluebernehmer.get(0) + " b = " + Booluebernehmer.get(1) + " c = " + Booluebernehmer.get(2));
+                   // AussagenTerm.setText("a = " + Booluebernehmer.get(0) + " b = " + Booluebernehmer.get(1) + " c = " + Booluebernehmer.get(2));
                     weiter.setVisibility(View.INVISIBLE);
                 } else {
-                    fragenanzahl = 0;
                     Endzeit = Calendar.getInstance().getTime();
                     speichern();
+                    fragenanzahl = 0;
+                    schwierigkeitsgrad = 0;
+                    schwierigkeitsgradpunkte1 = 0;
+                    schwierigkeitsgradpunkte2 = 0;
+                    schwierigkeitsgradpunkte3 = 0;
+                    schwierigkeitsgradfrage1 = 0;
+                    schwierigkeitsgradfrage2 = 0;
+                    schwierigkeitsgradfrage3 = 0;
                     activityWechsel();
                     finish();
                 }
@@ -147,15 +188,15 @@ public class Junktoren extends AppCompatActivity {
 
     }
 
-    public void dreierTerm() {
-
-        ParserText = "";
+    public String zweierTerm() {
 
         ArrayList<String> LogikAussage = new ArrayList<String>();
         ArrayList<String> Junktoren = new ArrayList<String>();
         ArrayList<String> Negation = new ArrayList<String>();
         ArrayList<String> offeneKlammer = new ArrayList<String>();
         ArrayList<String> Variable = new ArrayList<String>();
+
+        ParserText = "";
 
         LogikAussage.clear();
         Junktoren.clear();
@@ -173,14 +214,119 @@ public class Junktoren extends AppCompatActivity {
         offeneKlammer.add("");
         Variable.add("a");
         Variable.add("b");
+
+        Collections.shuffle(Negation);
+        Collections.shuffle(Variable);
+        Collections.shuffle(Junktoren);
+
+        LogikAussage.add(Negation.get(0));
+        LogikAussage.add(Variable.get(0));
+        LogikAussage.add(Junktoren.get(0));
+
+        Collections.shuffle(Negation);
+
+        LogikAussage.add(Negation.get(0));
+        LogikAussage.add(Variable.get(1));
+
+        for (int i = 0; i < LogikAussage.size(); i++) {
+            ParserText += LogikAussage.get(i);
+        }
+
+        Aussage = ParserText;
+
+        if (LogikAussage.contains("=>")) {
+            Aussage = Aussage.replaceAll("=>", "->");
+        }
+        if (LogikAussage.contains("<=>")) {
+            Aussage = Aussage.replaceAll("<=>", "<->");
+        }
+        if (LogikAussage.contains("&")) {
+            Aussage = Aussage.replaceAll("&", "∧");
+        }
+        if (LogikAussage.contains("|")) {
+            Aussage = Aussage.replaceAll("\\|", "∨");
+        }
+        if (LogikAussage.contains("~")) {
+            Aussage = Aussage.replaceAll("~", "¬");
+        }
+
+        return Aussage;
+    }
+
+    public void dreierTerm() {
+
+        ParserText = "";
+
+        ArrayList<String> LogikAussage = new ArrayList<String>();
+        ArrayList<String> Junktoren = new ArrayList<String>();
+        ArrayList<String> Negation = new ArrayList<String>();
+        ArrayList<String> offeneKlammer = new ArrayList<String>();
+        ArrayList<String> Variable = new ArrayList<String>();
+        ArrayList<Integer> Klammergeber = new ArrayList<Integer>();
+
+        LogikAussage.clear();
+        Junktoren.clear();
+        Negation.clear();
+        Variable.clear();
+        offeneKlammer.clear();
+        Klammergeber.clear();
+
+        Junktoren.add("=>");
+        Junktoren.add("<=>");
+        Junktoren.add("&");
+        Junktoren.add("|");
+        Negation.add("~");
+        Negation.add("");
+        offeneKlammer.add("(");
+        offeneKlammer.add("");
+        Variable.add("a");
+        Variable.add("b");
         Variable.add("c");
+        Klammergeber.add(0);
+        Klammergeber.add(1);
+        Klammergeber.add(2);
 
         Collections.shuffle(Junktoren);
         Collections.shuffle(Negation);
         Collections.shuffle(Variable);
         Collections.shuffle(offeneKlammer);
+        Collections.shuffle(Klammergeber);
 
-        LogikAussage.add(Negation.get(0));
+
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));          //0
+        LogikAussage.add(Variable.get(0));          //1                     ~a|~b|~c
+        Collections.shuffle(Junktoren);
+        LogikAussage.add(Junktoren.get(0));          //2
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));          //3
+        LogikAussage.add(Variable.get(1));          //4
+        Collections.shuffle(Junktoren);
+        LogikAussage.add(Junktoren.get(0));          //5
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));          //6
+        LogikAussage.add(Variable.get(2));          //7
+
+        if ((LogikAussage.get(2).equals("<=>") || LogikAussage.get(2).equals("=>")) && (LogikAussage.get(5).equals("<=>") || LogikAussage.get(5).equals("=>"))) {
+            LogikAussage.add(3, "(");
+            LogikAussage.add(")");
+        } else if ((LogikAussage.get(2).equals("<=>") || LogikAussage.get(2).equals("=>"))) {
+            LogikAussage.add(5, ")");
+            LogikAussage.add(0, "(");
+        } else if ((LogikAussage.get(5).equals("<=>") || LogikAussage.get(5).equals("=>"))) {
+            LogikAussage.add(3, "(");
+            LogikAussage.add(")");
+        } else if (Klammergeber.get(0) == 0) {
+
+        } else if (Klammergeber.get(0) == 1) {
+            LogikAussage.add(")");
+            LogikAussage.add(3, "(");
+        } else if (Klammergeber.get(0) == 2) {
+            LogikAussage.add(")");
+            LogikAussage.add(5, "(");
+        }
+
+        /*LogikAussage.add(Negation.get(0));
         LogikAussage.add(offeneKlammer.get(0));
         if (LogikAussage.contains("(")) {
             Collections.shuffle(Negation);
@@ -213,7 +359,210 @@ public class Junktoren extends AppCompatActivity {
             if (LogikAussage.indexOf("(") > 1) {
                 LogikAussage.add(")");
             }
+        }*/
+
+        for (int i = 0; i < LogikAussage.size(); i++) {
+            ParserText += LogikAussage.get(i);
         }
+
+        Aussage = ParserText;
+
+        if (LogikAussage.contains("=>")) {
+            Aussage = Aussage.replaceAll("=>", "->");
+        }
+        if (LogikAussage.contains("<=>")) {
+            Aussage = Aussage.replaceAll("<=>", "<->");
+        }
+        if (LogikAussage.contains("&")) {
+            Aussage = Aussage.replaceAll("&", "∧");
+        }
+        if (LogikAussage.contains("|")) {
+            Aussage = Aussage.replaceAll("\\|", "∨");
+        }
+        if (LogikAussage.contains("~")) {
+            Aussage = Aussage.replaceAll("~", "¬");
+        }
+
+    }
+
+    public void viererTerm() {
+
+        ParserText = "";
+
+        ArrayList<String> LogikAussage = new ArrayList<String>();
+        ArrayList<String> Junktoren = new ArrayList<String>();
+        ArrayList<String> Negation = new ArrayList<String>();
+        ArrayList<String> offeneKlammer = new ArrayList<String>();
+        ArrayList<String> Variable = new ArrayList<String>();
+        ArrayList<String> GeschlosseneKlammer = new ArrayList<String>();
+
+        LogikAussage.clear();
+        Junktoren.clear();
+        Negation.clear();
+        Variable.clear();
+        offeneKlammer.clear();
+        GeschlosseneKlammer.clear();
+
+        Junktoren.add("=>");
+        Junktoren.add("<=>");
+        Junktoren.add("&");
+        Junktoren.add("|");
+        Negation.add("~");
+        Negation.add("");
+        offeneKlammer.add("(");
+        offeneKlammer.add("");
+        Variable.add("a");
+        Variable.add("b");
+        Variable.add("c");
+        Variable.add("d");
+        GeschlosseneKlammer.add("");
+        GeschlosseneKlammer.add(")");
+
+        Collections.shuffle(Junktoren);
+        Collections.shuffle(Negation);
+        Collections.shuffle(Variable);
+        Collections.shuffle(offeneKlammer);
+        Collections.shuffle(GeschlosseneKlammer);
+
+        LogikAussage.add(Negation.get(0));          //0
+        LogikAussage.add(Variable.get(0));          //1
+        Collections.shuffle(Junktoren);
+        LogikAussage.add(Junktoren.get(0));         //2
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));          //3
+        LogikAussage.add(Variable.get(1));          //4
+        Collections.shuffle(Junktoren);
+        LogikAussage.add(Junktoren.get(0));         //5
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));          //6
+        LogikAussage.add(Variable.get(2));          //7
+        Collections.shuffle(Junktoren);
+        LogikAussage.add(Junktoren.get(0));         //8
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));          //9
+        LogikAussage.add(Variable.get(3));          //10
+
+        if (LogikAussage.contains("<=>") || LogikAussage.contains("=>")) {
+
+            if ((LogikAussage.get(8).equals("<=>") || LogikAussage.get(8).equals("=>")) && (LogikAussage.get(5).equals("<=>") || LogikAussage.get(5).equals("=>")) && (LogikAussage.get(2).equals("<=>") || LogikAussage.get(2).equals("=>"))) {
+                LogikAussage.add(")");
+                LogikAussage.add(")");
+                LogikAussage.add(6, "(");
+                LogikAussage.add(3, "(");
+            } else if ((LogikAussage.get(8).equals("<=>") || LogikAussage.get(8).equals("=>")) && (LogikAussage.get(5).equals("<=>") || LogikAussage.get(5).equals("=>"))) {
+                LogikAussage.add(")");
+                LogikAussage.add(6, "(");
+            } else if ((LogikAussage.get(2).equals("<=>") || LogikAussage.get(2).equals("=>")) && (LogikAussage.get(5).equals("<=>") || LogikAussage.get(5).equals("=>"))) {
+                LogikAussage.add(")");
+                LogikAussage.add(3, "(");
+            } else if ((LogikAussage.get(2).equals("<=>") || LogikAussage.get(2).equals("=>")) && (LogikAussage.get(8).equals("<=>") || LogikAussage.get(8).equals("=>"))) {
+                LogikAussage.add(5, ")");
+                LogikAussage.add(0, "(");
+            }
+        }
+
+        /*LogikAussage.add(Negation.get(0));                                          //0
+        LogikAussage.add(offeneKlammer.get(0));                                     //1
+        if (LogikAussage.contains("(")) {                                           //2
+            Collections.shuffle(Negation);
+            LogikAussage.add(Negation.get(0));
+        } else {                                                                    //2
+            LogikAussage.add("");
+        }
+        LogikAussage.add(Variable.get(0));                                          //3
+        LogikAussage.add(Junktoren.get(0));                                         //4
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));                                          //5
+        if (LogikAussage.contains("(")){                                            //6
+            LogikAussage.add("");
+        }else if (LogikAussage.contains("<=>") || LogikAussage.contains("=>")){     //6
+            LogikAussage.add("(");
+        }else {                                                                     //6
+            Collections.shuffle(offeneKlammer);
+            LogikAussage.add(offeneKlammer.get(0));
+        }
+        if (LogikAussage.get(6).equals("(")){                                       //7
+            Collections.shuffle(Negation);
+            LogikAussage.add(Negation.get(0));
+        }else {                                                                     //7
+            LogikAussage.add("");
+        }
+        LogikAussage.add(Variable.get(1));                                          //8
+        if (LogikAussage.get(6).equals("(")){                                       //9
+            LogikAussage.add("");
+        }else if (LogikAussage.get(4).equals("<=>")||LogikAussage.get(4).equals("=>")){ //9
+            LogikAussage.set(1,"(");
+            LogikAussage.add(")");
+        }else if (LogikAussage.get(1).equals("(")){                                 //9
+            Collections.shuffle(GeschlosseneKlammer);
+            LogikAussage.add(GeschlosseneKlammer.get(0));
+        }else {                                                                     //9
+            LogikAussage.add("");
+        }
+        Collections.shuffle(Junktoren);
+        LogikAussage.add(Junktoren.get(0));                                         //10
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));                                          //11
+
+        if (LogikAussage.contains("(")){
+            if (LogikAussage.get(6).equals("(")){                                   //12
+                Collections.shuffle(offeneKlammer);
+                LogikAussage.add(offeneKlammer.get(0));
+            }else if (LogikAussage.get(1).equals("(")){                             //12
+                LogikAussage.add("");
+            }
+        }else {                                                                     //12
+            Collections.shuffle(offeneKlammer);
+            LogikAussage.add(offeneKlammer.get(0));
+        }
+
+        if (LogikAussage.get(12).equals("(")){                                      //13
+            Collections.shuffle(Negation);
+            LogikAussage.add(Negation.get(0));
+        }else {                                                                     //13
+            LogikAussage.add("");
+        }
+        LogikAussage.add(Variable.get(2));                                          //14
+
+        if (LogikAussage.contains("(")){
+            if (LogikAussage.get(12).equals("(")){
+                LogikAussage.add("");
+            }else if (LogikAussage.get(6).equals("(")){
+                if (LogikAussage.get(1).equals("(")){
+                    LogikAussage.add(")");
+                }else if (LogikAussage.get(10).equals("<=>")||LogikAussage.get(10).equals("=>")){
+                    LogikAussage.add(")");
+                }else {
+                    Collections.shuffle(GeschlosseneKlammer);
+                    LogikAussage.add(GeschlosseneKlammer.get(0));
+                }
+
+            }else if (LogikAussage.get(1).equals("(")){
+                if (LogikAussage.contains(")")){
+                    LogikAussage.add("");
+                }else {
+                    LogikAussage.add(")");
+                }
+            }
+        }else {                                                                     //15
+            LogikAussage.add("");
+        }
+        Collections.shuffle(Junktoren);
+        LogikAussage.add(Junktoren.get(0));                                         //16
+        Collections.shuffle(Negation);
+        LogikAussage.add(Negation.get(0));                                          //17
+        LogikAussage.add(Variable.get(3));                                          //18
+        if (LogikAussage.get(12).equals("(")){
+            LogikAussage.add(")");
+        }
+        if (LogikAussage.get(6).equals("(")||LogikAussage.get(1).equals("(")){
+            if(LogikAussage.get(9).equals(")")||LogikAussage.get(15).equals(")")){
+                LogikAussage.add("");
+            }else {
+                LogikAussage.add(")");
+            }
+        }*/
+
 
         for (int i = 0; i < LogikAussage.size(); i++) {
             ParserText += LogikAussage.get(i);
@@ -278,6 +627,11 @@ public class Junktoren extends AppCompatActivity {
                 Booluebernehmer.add(Randombooler.get(0));
                 DNFinSTRING = DNFinSTRING.replaceAll("c", Randombooler.get(0).toString());
             }
+            if (DNFinSTRING.contains("d")) {
+                Collections.shuffle(Randombooler);
+                Booluebernehmer.add(Randombooler.get(0));
+                DNFinSTRING = DNFinSTRING.replaceAll("d", Randombooler.get(0).toString());
+            }
 
             String finalParser = DNFinSTRING;
             ergebnis = MVEL.evalToString(finalParser);
@@ -307,6 +661,13 @@ public class Junktoren extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.cancel2:
                     fragenanzahl = 0;
+                    schwierigkeitsgrad = 0;
+                    schwierigkeitsgradpunkte1 = 0;
+                    schwierigkeitsgradpunkte2 = 0;
+                    schwierigkeitsgradpunkte3 = 0;
+                    schwierigkeitsgradfrage1 = 0;
+                    schwierigkeitsgradfrage2 = 0;
+                    schwierigkeitsgradfrage3 = 0;
                     activityWechsel();
                     finish();
                     break;
@@ -332,7 +693,7 @@ public class Junktoren extends AppCompatActivity {
     public void speichern() {
         laden();
 
-        String text = annehmer + "UserID|" + Benutzername + ";Activity|Junktoren;Anfangszeit|" + Anfangszeit + ";Endzeit|" + Endzeit + ";Punkte|" + punkte + "von10;\n";
+        String text = annehmer + "UserID|" + Benutzername + ";Activity|Junktoren;Anfangszeit|" + Anfangszeit + ";Endzeit|" + Endzeit + ";PunkteS1|" + schwierigkeitsgradpunkte1 + " von" + schwierigkeitsgradfrage1 + ";PunkteS2|" + schwierigkeitsgradpunkte2 + " von" + schwierigkeitsgradfrage2 + ";PunkteS3|" + schwierigkeitsgradpunkte3 + " von" + schwierigkeitsgradfrage3 + ";\n";
 
         FileOutputStream fos = null;
 
@@ -384,6 +745,29 @@ public class Junktoren extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public void schwierigkeit (int schwierigkeitsgrad){
+        switch (schwierigkeitsgrad){
+            case 0:
+                zweierTerm();
+                schwierigkeitsgradfrage1++;
+                ueberpruefen();
+                AussagenTerm.setText("a = " + Booluebernehmer.get(0) + " b = " + Booluebernehmer.get(1));
+                break;
+            case 1:
+                dreierTerm();
+                schwierigkeitsgradfrage2++;
+                ueberpruefen();
+                AussagenTerm.setText("a = " + Booluebernehmer.get(0) + " b = " + Booluebernehmer.get(1)  + " c = " + Booluebernehmer.get(2));
+                break;
+            case 2:
+                viererTerm();
+                schwierigkeitsgradfrage3++;
+                ueberpruefen();
+                AussagenTerm.setText("a = " + Booluebernehmer.get(0) + " b = " + Booluebernehmer.get(1)  + " c = " + Booluebernehmer.get(2)  + " d = " + Booluebernehmer.get(3));
+                break;
         }
     }
 

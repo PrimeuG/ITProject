@@ -64,6 +64,8 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
     public static int punkte = 0;
     public static int maxfragen = 10;
 
+    public static int schwierigkeit = 5;
+
     public static Date Anfangszeit;
     public static Date Endzeit;
 
@@ -504,10 +506,16 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         erfuellbar.setBackgroundColor(Color.GREEN);
                         nichtErfuellbar.setBackgroundColor(Color.RED);
                         punkte++;
+                        if (schwierigkeit < 9){
+                            schwierigkeit+=2;
+                        }
 
                     } else {
                         erfuellbar.setBackgroundColor(Color.RED);
                         nichtErfuellbar.setBackgroundColor(Color.GREEN);
+                        if (schwierigkeit > 5){
+                            schwierigkeit-=2;
+                        }
                     }
                 } catch (ParserException e) {
                     e.printStackTrace();
@@ -522,10 +530,16 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
                         erfuellbar.setBackgroundColor(Color.GREEN);
                         nichtErfuellbar.setBackgroundColor(Color.RED);
+                        if (schwierigkeit > 5){
+                            schwierigkeit-=2;
+                        }
                     } else {
                         erfuellbar.setBackgroundColor(Color.RED);
                         nichtErfuellbar.setBackgroundColor(Color.GREEN);
                         punkte++;
+                        if (schwierigkeit < 9){
+                            schwierigkeit+=2;
+                        }
                     }
                 } catch (ParserException e) {
                     e.printStackTrace();
@@ -551,6 +565,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
         if (fragenanzahl >= maxfragen) {
             fragenanzahl=0;
+            schwierigkeit=5;
             Endzeit = Calendar.getInstance().getTime();
             speichern();
             activityWechsel();
@@ -578,7 +593,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         Endklausel.clear();
         ParserKlausel.clear();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < schwierigkeit; i++) {
 
             String ueberpruefer;
             boolean kommageber = false;
@@ -588,6 +603,9 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
             if (Klauselwaehler.get(0) == 0 && EinzelklauselStopper == 0) {
                 Collections.shuffle(EinzelKlausel);
+                while (Endklausel.contains(Mehrfachklausel.get(0))){
+                    Collections.shuffle(Mehrfachklausel);
+                }
                 Endklausel.add(EinzelKlausel.get(0));
                 ueberpruefer = EinzelKlausel.get(0);
                 for (int x = 0; x < ueberpruefer.length(); x++) {
@@ -610,7 +628,9 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
             } else {
 
                 Collections.shuffle(Mehrfachklausel);
-
+                while (Endklausel.contains(Mehrfachklausel.get(0))){
+                    Collections.shuffle(Mehrfachklausel);
+                }
                 if (Endklausel.contains(Mehrfachklausel.get(0))) {
                     i--;
                     kommageber = false;
@@ -637,7 +657,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                     }
 
                     ParserKlausel.add(uebernehmer);
-                    if (i < 4) {
+                    if (i < schwierigkeit-1) {
                         kommageber = true;
                     } else {
                         kommageber = false;
@@ -726,6 +746,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
             switch (item.getItemId()) {
                 case R.id.cancel:
                     fragenanzahl = 0;
+                    schwierigkeit = 5;
                     activityWechsel();
                     finish();
                     break;
