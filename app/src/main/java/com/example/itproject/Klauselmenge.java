@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import org.logicng.datastructures.Tristate;
 import org.logicng.formulas.Formula;
@@ -33,8 +34,8 @@ import java.util.Date;
 
 public class Klauselmenge extends AppCompatActivity implements View.OnClickListener {
 
-    Button erster, zweiter, dritter, vierter, fuenfter, erfuellbar, nichtErfuellbar, elf, a, b, c;
-    TextView text, Teilkalkuel1, Teilkalkuel2, Teilkalkuel3, Teilkalkuel4, Teilkalkuel5;
+    Button erfuellbar, nichtErfuellbar, elf;
+    TextView text;
 
 
     int fragenanzahl = 0;
@@ -50,11 +51,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
     private static String Benutzername = "Benutzername";
     private static String annehmer = "";
 
-    public static boolean fuerT1 = false;
-    public static boolean fuerT2 = false;
-    public static boolean fuerT3 = false;
-    public static boolean fuerT4 = false;
-    public static boolean fuerT5 = false;
+
     public static boolean Beantwortet = false;
 
     public static String ParserText = "";
@@ -65,6 +62,12 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
     public static int maxfragen = 10;
 
     public static int schwierigkeit = 5;
+    public static int schwierigkeitspunkte1 = 0;
+    public static int schwierigkeitspunkte2 = 0;
+    public static int schwierigkeitspunkte3 = 0;
+    public static int schwierigkeitsfrage1 = 0;
+    public static int schwierigkeitsfrage2 = 0;
+    public static int schwierigkeitsfrage3 = 0;
 
     public static Date Anfangszeit;
     public static Date Endzeit;
@@ -84,33 +87,12 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
         punkte = 0;
 
-        if (savedInstanceState == null) {
-            fragenanzahl = 0;
-        } else {
-            fragenanzahl = (int) savedInstanceState.get("Frage");
-        }
-
-
-
         text = findViewById(R.id.Text);
-        Teilkalkuel1 = findViewById(R.id.textView);
-        Teilkalkuel2 = findViewById(R.id.textView2);
-        Teilkalkuel3 = findViewById(R.id.textView3);
-        Teilkalkuel4 = findViewById(R.id.textView4);
-        Teilkalkuel5 = findViewById(R.id.textView5);
 
-
-        erster = (Button) findViewById(R.id.button);
-        zweiter = (Button) findViewById(R.id.button2);
-        dritter = (Button) findViewById(R.id.button3);
-        vierter = (Button) findViewById(R.id.button4);
-        fuenfter = (Button) findViewById(R.id.button5);
         erfuellbar = (Button) findViewById(R.id.button6);
         nichtErfuellbar = (Button) findViewById(R.id.button7);
         elf = (Button) findViewById(R.id.button11);
-        a = (Button) findViewById(R.id.buttona);
-        b = (Button) findViewById(R.id.buttonb);
-        c = (Button) findViewById(R.id.buttonc);
+
 
         ButtonBlaumacher();
 
@@ -156,24 +138,11 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         elf.setBackgroundColor(Color.BLUE);
         elf.setVisibility(View.INVISIBLE);
 
-        erster.setBackgroundColor(Color.RED);
-        zweiter.setBackgroundColor(Color.RED);
-        dritter.setBackgroundColor(Color.RED);
-        vierter.setBackgroundColor(Color.RED);
-        fuenfter.setBackgroundColor(Color.RED);
 
 
-        erster.setOnClickListener(this);
-        zweiter.setOnClickListener(this);
-        dritter.setOnClickListener(this);
-        vierter.setOnClickListener(this);
-        fuenfter.setOnClickListener(this);
         erfuellbar.setOnClickListener(this);
         nichtErfuellbar.setOnClickListener(this);
         elf.setOnClickListener(this);
-        a.setOnClickListener(this);
-        b.setOnClickListener(this);
-        c.setOnClickListener(this);
 
         Beantwortet = false;
 
@@ -192,312 +161,6 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
 
         switch (v.getId()) {
-            case R.id.button:
-                if (fuerT1) {
-                    erster.setBackgroundColor(Color.RED);
-                    fuerT1 = false;
-                } else {
-                    erster.setBackgroundColor(Color.GREEN);
-                    fuerT1 = true;
-                }
-                Beantwortet = false;
-                break;
-
-            case R.id.button2:
-                if (fuerT2) {
-                    zweiter.setBackgroundColor(Color.RED);
-                    fuerT2 = false;
-                } else {
-                    zweiter.setBackgroundColor(Color.GREEN);
-                    fuerT2 = true;
-                }
-                Beantwortet = false;
-                break;
-
-            case R.id.button3:
-                if (fuerT3) {
-                    dritter.setBackgroundColor(Color.RED);
-                    fuerT3 = false;
-                } else {
-                    dritter.setBackgroundColor(Color.GREEN);
-                    fuerT3 = true;
-                }
-                Beantwortet = false;
-                break;
-
-            case R.id.button4:
-                if (fuerT4) {
-                    vierter.setBackgroundColor(Color.RED);
-                    fuerT4 = false;
-                } else {
-                    vierter.setBackgroundColor(Color.GREEN);
-                    fuerT4 = true;
-                }
-                Beantwortet = false;
-                break;
-
-            case R.id.button5:
-                if (fuerT5) {
-                    fuenfter.setBackgroundColor(Color.RED);
-                    fuerT5 = false;
-                } else {
-                    fuenfter.setBackgroundColor(Color.GREEN);
-                    fuerT5 = true;
-                }
-                Beantwortet = false;
-                break;
-
-            case R.id.buttona:
-                if (fuerT1){
-                    String entferner;
-                    entferner = Teilkalkuel1.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬a","");
-                        entferner = entferner.replaceAll("a","");
-                        Teilkalkuel1.setText(entferner);
-                        erster.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-                if (fuerT2){
-                    String entferner;
-                    entferner = Teilkalkuel2.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬a","");
-                        entferner = entferner.replaceAll("a","");
-                        Teilkalkuel2.setText(entferner);
-                        zweiter.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-                if (fuerT3){
-                    String entferner;
-                    entferner = Teilkalkuel3.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬a","");
-                        entferner = entferner.replaceAll("a","");
-                        Teilkalkuel3.setText(entferner);
-                        dritter.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-                if (fuerT4){
-                    String entferner;
-                    entferner = Teilkalkuel4.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬a","");
-                        entferner = entferner.replaceAll("a","");
-                        Teilkalkuel4.setText(entferner);
-                        vierter.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-                if (fuerT5){
-                    String entferner;
-                    entferner = Teilkalkuel5.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬a","");
-                        entferner = entferner.replaceAll("a","");
-                        Teilkalkuel5.setText(entferner);
-                        fuenfter.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-
-                erster.setBackgroundColor(Color.RED);
-                fuerT1 = false;
-
-                zweiter.setBackgroundColor(Color.RED);
-                fuerT2 = false;
-
-                dritter.setBackgroundColor(Color.RED);
-                fuerT3 = false;
-
-                vierter.setBackgroundColor(Color.RED);
-                fuerT4 = false;
-
-                fuenfter.setBackgroundColor(Color.RED);
-                fuerT5 = false;
-
-                break;
-
-            case R.id.buttonb:
-                if (fuerT1){
-                    String entferner;
-                    entferner = Teilkalkuel1.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬b","");
-                        entferner = entferner.replaceAll("b","");
-                        Teilkalkuel1.setText(entferner);
-                        erster.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-                if (fuerT2){
-                    String entferner;
-                    entferner = Teilkalkuel2.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬b","");
-                        entferner = entferner.replaceAll("b","");
-                        Teilkalkuel2.setText(entferner);
-                        zweiter.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-                if (fuerT3){
-                    String entferner;
-                    entferner = Teilkalkuel3.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬b","");
-                        entferner = entferner.replaceAll("b","");
-                        Teilkalkuel3.setText(entferner);
-                        dritter.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-                if (fuerT4){
-                    String entferner;
-                    entferner = Teilkalkuel4.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬b","");
-                        entferner = entferner.replaceAll("b","");
-                        Teilkalkuel4.setText(entferner);
-                        vierter.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-                if (fuerT5){
-                    String entferner;
-                    entferner = Teilkalkuel5.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬b","");
-                        entferner = entferner.replaceAll("b","");
-                        Teilkalkuel5.setText(entferner);
-                        fuenfter.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-
-                erster.setBackgroundColor(Color.RED);
-                fuerT1 = false;
-
-                zweiter.setBackgroundColor(Color.RED);
-                fuerT2 = false;
-
-                dritter.setBackgroundColor(Color.RED);
-                fuerT3 = false;
-
-                vierter.setBackgroundColor(Color.RED);
-                fuerT4 = false;
-
-                fuenfter.setBackgroundColor(Color.RED);
-                fuerT5 = false;
-
-                break;
-
-            case R.id.buttonc:
-                if (fuerT1){
-                    String entferner;
-                    entferner = Teilkalkuel1.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬c","");
-                        entferner = entferner.replaceAll("c","");
-                        Teilkalkuel1.setText(entferner);
-                        erster.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-                if (fuerT2){
-                    String entferner;
-                    entferner = Teilkalkuel2.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬c","");
-                        entferner = entferner.replaceAll("c","");
-                        Teilkalkuel2.setText(entferner);
-                        zweiter.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-                if (fuerT3){
-                    String entferner;
-                    entferner = Teilkalkuel3.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬c","");
-                        entferner = entferner.replaceAll("c","");
-                        Teilkalkuel3.setText(entferner);
-                        dritter.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-                if (fuerT4){
-                    String entferner;
-                    entferner = Teilkalkuel4.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬c","");
-                        entferner = entferner.replaceAll("c","");
-                        Teilkalkuel4.setText(entferner);
-                        vierter.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-                if (fuerT5){
-                    String entferner;
-                    entferner = Teilkalkuel5.getText().toString();
-                    try {
-                        entferner = entferner.replaceAll("¬c","");
-                        entferner = entferner.replaceAll("c","");
-                        Teilkalkuel5.setText(entferner);
-                        fuenfter.setText(entferner);
-                        entferner="";
-                    }catch (Exception e){
-
-                    }
-                }
-
-                erster.setBackgroundColor(Color.RED);
-                fuerT1 = false;
-
-                zweiter.setBackgroundColor(Color.RED);
-                fuerT2 = false;
-
-                dritter.setBackgroundColor(Color.RED);
-                fuerT3 = false;
-
-                vierter.setBackgroundColor(Color.RED);
-                fuerT4 = false;
-
-                fuenfter.setBackgroundColor(Color.RED);
-                fuerT5 = false;
-
-                break;
 
             case R.id.button6:
                 try {
@@ -506,6 +169,18 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         erfuellbar.setBackgroundColor(Color.GREEN);
                         nichtErfuellbar.setBackgroundColor(Color.RED);
                         punkte++;
+
+                        if(schwierigkeit == 5){
+                            schwierigkeitspunkte1++;
+                            schwierigkeitsfrage1++;
+                        }else if (schwierigkeit == 7){
+                            schwierigkeitspunkte2++;
+                            schwierigkeitsfrage2++;
+                        }else if (schwierigkeit == 9){
+                            schwierigkeitspunkte3++;
+                            schwierigkeitsfrage3++;
+                        }
+
                         if (schwierigkeit < 9){
                             schwierigkeit+=2;
                         }
@@ -513,6 +188,15 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                     } else {
                         erfuellbar.setBackgroundColor(Color.RED);
                         nichtErfuellbar.setBackgroundColor(Color.GREEN);
+
+                        if(schwierigkeit == 5){
+                            schwierigkeitsfrage1++;
+                        }else if (schwierigkeit == 7){
+                            schwierigkeitsfrage2++;
+                        }else if (schwierigkeit == 9){
+                            schwierigkeitsfrage3++;
+                        }
+
                         if (schwierigkeit > 5){
                             schwierigkeit-=2;
                         }
@@ -530,6 +214,15 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
                         erfuellbar.setBackgroundColor(Color.GREEN);
                         nichtErfuellbar.setBackgroundColor(Color.RED);
+
+                        if(schwierigkeit == 5){
+                            schwierigkeitsfrage1++;
+                        }else if (schwierigkeit == 7){
+                            schwierigkeitsfrage2++;
+                        }else if (schwierigkeit == 9){
+                            schwierigkeitsfrage3++;
+                        }
+
                         if (schwierigkeit > 5){
                             schwierigkeit-=2;
                         }
@@ -537,6 +230,18 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         erfuellbar.setBackgroundColor(Color.RED);
                         nichtErfuellbar.setBackgroundColor(Color.GREEN);
                         punkte++;
+
+                        if(schwierigkeit == 5){
+                            schwierigkeitspunkte1++;
+                            schwierigkeitsfrage1++;
+                        }else if (schwierigkeit == 7){
+                            schwierigkeitspunkte2++;
+                            schwierigkeitsfrage2++;
+                        }else if (schwierigkeit == 9){
+                            schwierigkeitspunkte3++;
+                            schwierigkeitsfrage3++;
+                        }
+
                         if (schwierigkeit < 9){
                             schwierigkeit+=2;
                         }
@@ -568,6 +273,12 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
             schwierigkeit=5;
             Endzeit = Calendar.getInstance().getTime();
             speichern();
+            schwierigkeitspunkte1 = 0;
+            schwierigkeitspunkte2 = 0;
+            schwierigkeitspunkte3 = 0;
+            schwierigkeitsfrage1 = 0;
+            schwierigkeitsfrage2 = 0;
+            schwierigkeitsfrage3 = 0;
             activityWechsel();
             finish();
         }
@@ -690,38 +401,10 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
         text.setText("Ist diese Klauselmenge erfüllbar?\n" + Klauselmenge);
 
-        erster.setText(Endklausel.get(0));
-        zweiter.setText(Endklausel.get(2));
-        dritter.setText(Endklausel.get(4));
-        vierter.setText(Endklausel.get(6));
-        fuenfter.setText(Endklausel.get(8));
-
-        Teilkalkuel1.setText(Endklausel.get(0));
-        Teilkalkuel2.setText(Endklausel.get(2));
-        Teilkalkuel3.setText(Endklausel.get(4));
-        Teilkalkuel4.setText(Endklausel.get(6));
-        Teilkalkuel5.setText(Endklausel.get(8));
     }
 
     public void Buttonzuruecksteller() {
 
-        fuerT1 = false;
-        fuerT2 = false;
-        fuerT3 = false;
-        fuerT4 = false;
-        fuerT5 = false;
-
-        erster.setBackgroundColor(Color.RED);
-        zweiter.setBackgroundColor(Color.RED);
-        dritter.setBackgroundColor(Color.RED);
-        vierter.setBackgroundColor(Color.RED);
-        fuenfter.setBackgroundColor(Color.RED);
-
-        Teilkalkuel1.setVisibility(View.VISIBLE);
-        Teilkalkuel2.setVisibility(View.VISIBLE);
-        Teilkalkuel3.setVisibility(View.VISIBLE);
-        Teilkalkuel4.setVisibility(View.VISIBLE);
-        Teilkalkuel5.setVisibility(View.VISIBLE);
 
         erfuellbar.setBackgroundColor(Color.BLUE);
         nichtErfuellbar.setBackgroundColor(Color.BLUE);
@@ -747,38 +430,16 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                 case R.id.cancel:
                     fragenanzahl = 0;
                     schwierigkeit = 5;
+                    schwierigkeitspunkte1 = 0;
+                    schwierigkeitspunkte2 = 0;
+                    schwierigkeitspunkte3 = 0;
+                    schwierigkeitsfrage1 = 0;
+                    schwierigkeitsfrage2 = 0;
+                    schwierigkeitsfrage3 = 0;
                     activityWechsel();
                     finish();
                     break;
                 case R.id.reset:
-
-                    Teilkalkuel1.setText(Endklausel.get(0));
-                    Teilkalkuel2.setText(Endklausel.get(2));
-                    Teilkalkuel3.setText(Endklausel.get(4));
-                    Teilkalkuel4.setText(Endklausel.get(6));
-                    Teilkalkuel5.setText(Endklausel.get(8));
-
-                    erster.setText(Endklausel.get(0));
-                    zweiter.setText(Endklausel.get(2));
-                    dritter.setText(Endklausel.get(4));
-                    vierter.setText(Endklausel.get(6));
-                    fuenfter.setText(Endklausel.get(8));
-
-                    erster.setBackgroundColor(Color.RED);
-                    fuerT1 = false;
-
-                    zweiter.setBackgroundColor(Color.RED);
-                    fuerT2 = false;
-
-                    dritter.setBackgroundColor(Color.RED);
-                    fuerT3 = false;
-
-                    vierter.setBackgroundColor(Color.RED);
-                    fuerT4 = false;
-
-                    fuenfter.setBackgroundColor(Color.RED);
-                    fuerT5 = false;
-
                     break;
             }
         } catch (Exception e) {
@@ -791,9 +452,6 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         erfuellbar.setBackgroundColor(Color.BLUE);
         nichtErfuellbar.setBackgroundColor(Color.BLUE);
         elf.setBackgroundColor(Color.BLUE);
-        a.setBackgroundColor(Color.BLUE);
-        b.setBackgroundColor(Color.BLUE);
-        c.setBackgroundColor(Color.BLUE);
     }
 
     //Die Methoden speichern() und laden() sind übernommen von https://gist.github.com/codinginflow/6c13bd0d08416115798f17d45b5d8056
@@ -801,7 +459,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
     public void speichern() {
         laden();
 
-        String text = annehmer + "UserID|" + Benutzername + ";Activity|Klauselmengen;Anfangszeit|" + Anfangszeit + ";Endzeit|" + Endzeit + ";Punkte|" + punkte + "von10;\n";
+        String text = annehmer + "UserID|" + Benutzername + ";Activity|Klauselmengen;Anfangszeit|" + Anfangszeit + ";Endzeit|" + Endzeit + ";PunkteS1|" + schwierigkeitspunkte1 + " von" + schwierigkeitsfrage1 + ";PunkteS2|" + schwierigkeitspunkte2 + " von" + schwierigkeitsfrage2 + ";PunkteS3|" + schwierigkeitspunkte3 + " von" + schwierigkeitsfrage3 + ";\n";
 
         FileOutputStream fos = null;
 
