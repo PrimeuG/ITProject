@@ -257,4 +257,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintGuide_percent="0.97" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline20"
+        app:layout_constraintEnd_toStartOf="@+id/guideline100"
+        app:layout_constraintStart_toStartOf="@+id/guideline99"
+        app:layout_constraintTop_toBottomOf="@+id/Text">
+
+        <com.kyanogen.signatureview.SignatureView
+            android:id="@+id/signature_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:backgroundColor="#ffffff"
+            app:enableSignature="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:penColor="#000000"
+            app:penSize="4dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

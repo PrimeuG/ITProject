@@ -2,6 +2,7 @@ package com.example.itproject;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+
+import com.kyanogen.signatureview.SignatureView;
 
 import org.logicng.datastructures.Tristate;
 import org.logicng.formulas.Formula;
@@ -39,6 +42,8 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
 
     int fragenanzahl = 0;
+
+    SignatureView signatureView;
 
     ArrayList<String> Endklausel = new ArrayList<>();
     ArrayList<String> ParserKlausel = new ArrayList<>();
@@ -80,6 +85,8 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_klauselmenge);
+
+        signatureView = findViewById(R.id.signature_view);
 
         Anfangszeit = null;
         Endzeit = null;
@@ -260,6 +267,9 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         Endzeit = Calendar.getInstance().getTime();
                         Klauselerstellen();
                         textersteller();
+                        signatureView.clearCanvas();
+                        signatureView.setPenColor(Color.BLACK);
+                        signatureView.setPenSize(10);
                         Buttonzuruecksteller();
                         elf.setVisibility(View.INVISIBLE);
                     }
@@ -273,12 +283,15 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
             schwierigkeit=5;
             Endzeit = Calendar.getInstance().getTime();
             speichern();
+            signatureView.clearCanvas();
             schwierigkeitspunkte1 = 0;
             schwierigkeitspunkte2 = 0;
             schwierigkeitspunkte3 = 0;
             schwierigkeitsfrage1 = 0;
             schwierigkeitsfrage2 = 0;
             schwierigkeitsfrage3 = 0;
+            signatureView.setPenColor(Color.BLACK);
+            signatureView.setPenSize(10);
             activityWechsel();
             finish();
         }
@@ -418,7 +431,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.spiel_menu, menu);
+        getMenuInflater().inflate(R.menu.spiel_menu3, menu);
         return true;
     }
 
@@ -436,10 +449,23 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                     schwierigkeitsfrage1 = 0;
                     schwierigkeitsfrage2 = 0;
                     schwierigkeitsfrage3 = 0;
+                    signatureView.setPenColor(Color.BLACK);
+                    signatureView.setPenSize(10);
                     activityWechsel();
                     finish();
                     break;
                 case R.id.reset:
+                    signatureView.clearCanvas();
+                    signatureView.setPenColor(Color.BLACK);
+                    signatureView.setPenSize(10);
+                    break;
+                case R.id.eraser:
+                    signatureView.setPenColor(Color.WHITE);
+                    signatureView.setPenSize(50);
+                    break;
+                case R.id.pen:
+                    signatureView.setPenColor(Color.BLACK);
+                    signatureView.setPenSize(10);
                     break;
             }
         } catch (Exception e) {

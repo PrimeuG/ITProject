@@ -37,6 +37,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'org.logicng:logicng:2.2.0'
     implementation 'com.opencsv:opencsv:5.5.2'
+    implementation 'com.kyanogen.signatureview:signature-view:1.2'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
