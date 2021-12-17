@@ -84,7 +84,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Landscape Modus ist deaktiviert
+        //Landscape Modus ist deaktiviert.
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //hier wird die Klauselmenge xml geladen
