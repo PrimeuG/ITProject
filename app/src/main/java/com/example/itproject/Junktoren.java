@@ -46,7 +46,6 @@ public class Junktoren extends AppCompatActivity {
     public static Date Endzeit;
 
     public static int fragenanzahl = 0;
-    public static int punkte;
 
     public static int schwierigkeitsgrad = 0;
     public static int schwierigkeitsgradpunkte1 = 0;
@@ -64,37 +63,49 @@ public class Junktoren extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Landscape Modus wird deaktiviert
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        //Die activity_junktoren.xml wird als Layout verwendet
         setContentView(R.layout.activity_junktoren);
 
-
+        //hier wird die Zeiterfassung fuer die txt vorbereitet
         Anfangszeit = null;
         Endzeit = null;
-
         Anfangszeit = Calendar.getInstance().getTime();
-        punkte = 0;
 
 
 
+        //die Buttons werden zu den IDs aus dem xml zugewiesen
         erfuellbar = (Button) findViewById(R.id.button28);
         nichterfuellbar = (Button) findViewById(R.id.button29);
         weiter = (Button) findViewById(R.id.button30);
 
+        //hier werden den Textviews den IDs aus dem xml zugewiesen
         Junktorenterm = findViewById(R.id.textView9);
         AussagenTerm = findViewById(R.id.textView10);
 
+        //die Methode ist dafuer da, dass die Buttons nach dem Beantworten wieder Blau gefaerbt werden
         ButtonBlaumacher();
 
         fragenanzahl = 0;
 
-
+        //Die Methode bekommt einen schwierigkeitsgrad hinein und erstellt dann einen Term der passend zum schwierigkeitsgrad ist
         schwierigkeit(schwierigkeitsgrad);
 
-
+        //hier wird die Aufgabenstellung gesetzt
         Junktorenterm.setText("Ist die Aussage: \n" + Aussage + "\nin der unten beschriebenen Konstellation lösbar? ");
 
+        //Der weiter button soll erst sichtbar werden, wenn die frage beantwortet wurde, somit wird er anfangs invisible gestellt
         weiter.setVisibility(View.INVISIBLE);
 
+        /*
+        der erfuellbar button wird gruen, sofern die antwort erfuellbar ist ansonsten rot - aequivalent zum nicht erfuellbar button
+        nach dem betaetigen der erfuellbar oder nichterfuellbar buttons wird der weiter button sichtbar
+        die punkte werden einzelnd fuer schwierigkeitsgrade einzelnd gezaehlt
+        sofern die maximale anzahl an fragen erreicht ist, wird die zeit gespeichert, ebenso die punkte und wie viele fragen von welcher schwierigkeit
+         */
         erfuellbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -188,6 +199,11 @@ public class Junktoren extends AppCompatActivity {
 
     }
 
+    /*
+    in dieser Methode wird ein Term mit 2 Variablen erstellt
+    die junktoren werden als erstes so gewaehlt das es fuer die prueffunktion genutzt werden kann
+    danach werden die Junktoren replaced in die Form wie es die Studenten kennen
+     */
     public String zweierTerm() {
 
         ArrayList<String> LogikAussage = new ArrayList<String>();
@@ -253,6 +269,12 @@ public class Junktoren extends AppCompatActivity {
         return Aussage;
     }
 
+
+    /*
+    in dieser Methode wird ein Term mit 3 Variablen erstellt
+    die junktoren werden als erstes so gewaehlt das es fuer die prueffunktion genutzt werden kann
+    danach werden die Junktoren replaced in die Form wie es die Studenten kennen
+     */
     public void dreierTerm() {
 
         ParserText = "";
@@ -326,40 +348,6 @@ public class Junktoren extends AppCompatActivity {
             LogikAussage.add(5, "(");
         }
 
-        /*LogikAussage.add(Negation.get(0));
-        LogikAussage.add(offeneKlammer.get(0));
-        if (LogikAussage.contains("(")) {
-            Collections.shuffle(Negation);
-            LogikAussage.add(Negation.get(0));
-        }
-        LogikAussage.add(Variable.get(0));
-        LogikAussage.add(Junktoren.get(0));
-        Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));
-        if (!LogikAussage.contains("(")) {
-            Collections.shuffle(offeneKlammer);
-            LogikAussage.add(offeneKlammer.get(0));
-            if (LogikAussage.contains("(")) {
-                Collections.shuffle(Negation);
-                LogikAussage.add(Negation.get(0));
-            }
-        }
-        LogikAussage.add(Variable.get(1));
-        if (LogikAussage.contains("(")) {
-            if (LogikAussage.indexOf("(") == 1) {
-                LogikAussage.add(")");
-            }
-        }
-        Collections.shuffle(Junktoren);
-        LogikAussage.add(Junktoren.get(0));
-        Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));
-        LogikAussage.add(Variable.get(2));
-        if (LogikAussage.contains("(")) {
-            if (LogikAussage.indexOf("(") > 1) {
-                LogikAussage.add(")");
-            }
-        }*/
 
         for (int i = 0; i < LogikAussage.size(); i++) {
             ParserText += LogikAussage.get(i);
@@ -385,6 +373,11 @@ public class Junktoren extends AppCompatActivity {
 
     }
 
+    /*
+    in dieser Methode wird ein Term mit 4 Variablen erstellt
+    die junktoren werden als erstes so gewaehlt das es fuer die prueffunktion genutzt werden kann
+    danach werden die Junktoren replaced in die Form wie es die Studenten kennen
+     */
     public void viererTerm() {
 
         ParserText = "";
@@ -461,108 +454,6 @@ public class Junktoren extends AppCompatActivity {
             }
         }
 
-        /*LogikAussage.add(Negation.get(0));                                          //0
-        LogikAussage.add(offeneKlammer.get(0));                                     //1
-        if (LogikAussage.contains("(")) {                                           //2
-            Collections.shuffle(Negation);
-            LogikAussage.add(Negation.get(0));
-        } else {                                                                    //2
-            LogikAussage.add("");
-        }
-        LogikAussage.add(Variable.get(0));                                          //3
-        LogikAussage.add(Junktoren.get(0));                                         //4
-        Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));                                          //5
-        if (LogikAussage.contains("(")){                                            //6
-            LogikAussage.add("");
-        }else if (LogikAussage.contains("<=>") || LogikAussage.contains("=>")){     //6
-            LogikAussage.add("(");
-        }else {                                                                     //6
-            Collections.shuffle(offeneKlammer);
-            LogikAussage.add(offeneKlammer.get(0));
-        }
-        if (LogikAussage.get(6).equals("(")){                                       //7
-            Collections.shuffle(Negation);
-            LogikAussage.add(Negation.get(0));
-        }else {                                                                     //7
-            LogikAussage.add("");
-        }
-        LogikAussage.add(Variable.get(1));                                          //8
-        if (LogikAussage.get(6).equals("(")){                                       //9
-            LogikAussage.add("");
-        }else if (LogikAussage.get(4).equals("<=>")||LogikAussage.get(4).equals("=>")){ //9
-            LogikAussage.set(1,"(");
-            LogikAussage.add(")");
-        }else if (LogikAussage.get(1).equals("(")){                                 //9
-            Collections.shuffle(GeschlosseneKlammer);
-            LogikAussage.add(GeschlosseneKlammer.get(0));
-        }else {                                                                     //9
-            LogikAussage.add("");
-        }
-        Collections.shuffle(Junktoren);
-        LogikAussage.add(Junktoren.get(0));                                         //10
-        Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));                                          //11
-
-        if (LogikAussage.contains("(")){
-            if (LogikAussage.get(6).equals("(")){                                   //12
-                Collections.shuffle(offeneKlammer);
-                LogikAussage.add(offeneKlammer.get(0));
-            }else if (LogikAussage.get(1).equals("(")){                             //12
-                LogikAussage.add("");
-            }
-        }else {                                                                     //12
-            Collections.shuffle(offeneKlammer);
-            LogikAussage.add(offeneKlammer.get(0));
-        }
-
-        if (LogikAussage.get(12).equals("(")){                                      //13
-            Collections.shuffle(Negation);
-            LogikAussage.add(Negation.get(0));
-        }else {                                                                     //13
-            LogikAussage.add("");
-        }
-        LogikAussage.add(Variable.get(2));                                          //14
-
-        if (LogikAussage.contains("(")){
-            if (LogikAussage.get(12).equals("(")){
-                LogikAussage.add("");
-            }else if (LogikAussage.get(6).equals("(")){
-                if (LogikAussage.get(1).equals("(")){
-                    LogikAussage.add(")");
-                }else if (LogikAussage.get(10).equals("<=>")||LogikAussage.get(10).equals("=>")){
-                    LogikAussage.add(")");
-                }else {
-                    Collections.shuffle(GeschlosseneKlammer);
-                    LogikAussage.add(GeschlosseneKlammer.get(0));
-                }
-
-            }else if (LogikAussage.get(1).equals("(")){
-                if (LogikAussage.contains(")")){
-                    LogikAussage.add("");
-                }else {
-                    LogikAussage.add(")");
-                }
-            }
-        }else {                                                                     //15
-            LogikAussage.add("");
-        }
-        Collections.shuffle(Junktoren);
-        LogikAussage.add(Junktoren.get(0));                                         //16
-        Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));                                          //17
-        LogikAussage.add(Variable.get(3));                                          //18
-        if (LogikAussage.get(12).equals("(")){
-            LogikAussage.add(")");
-        }
-        if (LogikAussage.get(6).equals("(")||LogikAussage.get(1).equals("(")){
-            if(LogikAussage.get(9).equals(")")||LogikAussage.get(15).equals(")")){
-                LogikAussage.add("");
-            }else {
-                LogikAussage.add(")");
-            }
-        }*/
-
 
         for (int i = 0; i < LogikAussage.size(); i++) {
             ParserText += LogikAussage.get(i);
@@ -587,6 +478,11 @@ public class Junktoren extends AppCompatActivity {
         }
 
     }
+
+    /*
+    in dieser Methode ist eine Industrie Bibliothek eingearbeitet
+    die Methode ueberprueft ob der gegebene Term aus der Aufgabenstellung erfuellbar ist oder nicht
+     */
 
     public void ueberpruefen() {
 
@@ -642,12 +538,14 @@ public class Junktoren extends AppCompatActivity {
 
     }
 
+    //nachdem die Maximale Fragen erreicht sind bzw. ein Student auf beenden gedrückt hat wechselt er mit dieser Methode wieder in die Main beziehungsweise in den Anfangsscreen
     private void activityWechsel() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
 
+    //hier wird ein Dropdownmenue erstellt
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.spiel_menu2, menu);
@@ -679,6 +577,7 @@ public class Junktoren extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //macht die Buttons blau, nachdem sie durch das beantworten anders gefaerbt wurden
     public void ButtonBlaumacher() {
 
         erfuellbar.setBackgroundColor(Color.BLUE);
@@ -689,7 +588,7 @@ public class Junktoren extends AppCompatActivity {
     }
 
     //Die Methoden speichern() und laden() sind übernommen von https://gist.github.com/codinginflow/6c13bd0d08416115798f17d45b5d8056
-
+    //Diese Methode speichert Dinge wie User, Activity, Anfangs und Endzeit sowie Punkte in eine txt Datei
     public void speichern() {
         laden();
 
@@ -718,6 +617,7 @@ public class Junktoren extends AppCompatActivity {
         }
     }
 
+    //die Methode laedt die txt Datei damit diese wieder hinzugefuegt wird um beim speichern in die txt alles davor nicht ueberschrieben wird
     public void laden(){
         FileInputStream fis = null;
 
@@ -748,6 +648,7 @@ public class Junktoren extends AppCompatActivity {
         }
     }
 
+    //hier wird der Term passend zur Schwierigkeit erstellt
     public void schwierigkeit (int schwierigkeitsgrad){
         switch (schwierigkeitsgrad){
             case 0:

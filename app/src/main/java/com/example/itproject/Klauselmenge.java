@@ -83,33 +83,44 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Landscape Modus ist deaktiviert
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        //hier wird die Klauselmenge xml geladen
         setContentView(R.layout.activity_klauselmenge);
 
+        //dies ist das Paint aehnliche Feld, die ID aus der xml wird zugewiesen
         signatureView = findViewById(R.id.signature_view);
 
+        //hier wird die Zeiterfassung fuer die txt vorbereitet
         Anfangszeit = null;
         Endzeit = null;
         Anfangszeit = Calendar.getInstance().getTime();
 
         punkte = 0;
 
+        //Textview wird aus xml eine ID zugeordnet
         text = findViewById(R.id.Text);
 
+        //den Buttons wird eine ID aus dem xml zugeordnet
         erfuellbar = (Button) findViewById(R.id.button6);
         nichtErfuellbar = (Button) findViewById(R.id.button7);
         elf = (Button) findViewById(R.id.button11);
 
-
+        //Methode um die Buttons nach dem Beantworten (gefaerbt durch beantworten) wieder blau gefaerbt
         ButtonBlaumacher();
 
+        //Arraylisten werden gecleart wenn jemand die activity nacheinander uebt, dann haben die Listen nicht mehrmals das gleiche drin
         Klauselwaehler.clear();
         EinzelKlausel.clear();
         Mehrfachklausel.clear();
 
+        //Klauselwaehler wird genutzt um zu Entscheiden ob Einzelklauseln oder Mehrfachklauseln genutzt werden
         Klauselwaehler.add(0);
         Klauselwaehler.add(1);
 
+        //Klauseln mit einer Variabel
         EinzelKlausel.add("{a}");
         EinzelKlausel.add("{¬a}");
         EinzelKlausel.add("{b}");
@@ -117,6 +128,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         EinzelKlausel.add("{c}");
         EinzelKlausel.add("{¬c}");
 
+        //Alle Klauseln die (ohne Tauschen z.B. {a,b}{b,a}) moeglich sind
         Mehrfachklausel.add("{a,b}");
         Mehrfachklausel.add("{a,¬b}");
         Mehrfachklausel.add("{¬a,b}");
@@ -140,21 +152,28 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         Mehrfachklausel.add("{¬a,¬b,¬c}");
 
 
+        //Buttons werden Blau gefaerbt
         erfuellbar.setBackgroundColor(Color.BLUE);
         nichtErfuellbar.setBackgroundColor(Color.BLUE);
         elf.setBackgroundColor(Color.BLUE);
+
+        //elf bzw. weiter wird unsichtbar gemacht, da er erst gebraucht wird wenn man die erfuellbar oder nichterfuellbar betaetigt hat
         elf.setVisibility(View.INVISIBLE);
 
-
-
+        //OnClickListener fuer die Buttons erstellt
         erfuellbar.setOnClickListener(this);
         nichtErfuellbar.setOnClickListener(this);
         elf.setOnClickListener(this);
 
         Beantwortet = false;
 
+        //die Methode erstellt eine Klausel
         Klauselerstellen();
+
+        //die Methode stellt die Aufgabenstellung mit der Klauselmenge
         textersteller();
+
+        //die Methode ueberprueft ob die gegebene Klauselmenge erfuellbar oder nicht erfuellbar ist
         try {
             Logikueberpruefer(ParserTexte);
         } catch (ParserException e) {
@@ -169,6 +188,14 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()) {
 
+            /*
+            wenn die Klauselmenge erfuellbar ist und man den erfuellbarbutton bestaetigt wird dieser gruen ansonsten rot
+            ebenso wird der nichterfuellbar button rot, sofern die Klauselmenge erfuellbar ist ansonsten wird er gruen
+            wenn der richtige Button betaetigt wird, so wird die schwierigkeit + 2 gerechnet
+            die schwierigkeit entspricht die anzahl der einzelnen Klauseln der Klauselmenge
+            die punkte werden entsprechend dem schwierigkeitsgrad zugeordnet
+            beim beantworten wird der weiter Button sichtbar gemacht
+             */
             case R.id.button6:
                 try {
                     if (Logikueberpruefer(ParserTexte).equals("TRUE")) {
@@ -259,6 +286,11 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                 elf.setVisibility(View.VISIBLE);
                 break;
 
+                /*
+                sofern der weiter Button betaetigt wird und die maxfragen noch nicht erreicht sind, dann wird der weiter button wieder unsichtbar gemacht
+                eine neue Klausel wird erstellt und die Endzeit wird genommen
+                die SignatureView wird gecleart
+                 */
             case R.id.button11:
                 try {
                     fragenanzahl++;
@@ -278,6 +310,10 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                 break;
         }
 
+        /*
+        sofern die Maxfragen erreicht worden sind wird die endzeit gespeichert, sowie punkte, aktivity, anzahl an fragen
+        danach wird alles zurueck gesetzt damit man bei einer weiteren nutzung des Themengebietes wieder neue Klauseln erstellt und die Punkte nicht weiter gezaehlt werden
+         */
         if (fragenanzahl >= maxfragen) {
             fragenanzahl=0;
             schwierigkeit=5;
@@ -299,7 +335,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
+    //dies ist eine Methode aus einer Industrie Bibliothek und ueberprueft ob die erstellte Klauselmenge loesbar ist
     public String Logikueberpruefer(String Parsertext) throws ParserException {
         final FormulaFactory f = new FormulaFactory();
         final PropositionalParser p = new PropositionalParser(f);
@@ -313,6 +349,11 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         return result.toString();
     }
 
+    /*
+    in dieser Methode werden die Klauselmengen erstellt
+    hier wird dabei unterschieden zwischen einer Klauselmenge mit den Zeichen die die User aus den Theoretisch Informatik Vorlesung kennengelernt haben
+    sowie eine Klauselmenge die fuer die Pruefmethode ist, denn diese kann bestimmte zeichen nicht arbeiten
+     */
     public void Klauselerstellen() {
         Endklausel.clear();
         ParserKlausel.clear();
@@ -410,12 +451,14 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         EinzelklauselStopper = 0;
     }
 
+    //die Methode erstellt die Aufgabenstellung und setzt diese im textview
     public void textersteller() {
 
         text.setText("Ist diese Klauselmenge erfüllbar?\n" + Klauselmenge);
 
     }
 
+    //diese Methode macht die Buttons wieder Blau
     public void Buttonzuruecksteller() {
 
 
@@ -424,6 +467,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //nach dem Beenden bzw. durch das erreichen der Maxfragen gelangt man mit dieser Methode wieder in d
     private void activityWechsel() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -493,8 +537,6 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
             fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
             fos.write(text.getBytes());
 
-
-            //Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME, Toast.LENGTH_LONG).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -510,6 +552,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //Die Methode ist dafuer da, dass bei der Methode speichern nicht die txt ueberschrieben wird, denn sie wird vorher geladen und dann bei der speicher methode mit uebernommen
     public void laden(){
         FileInputStream fis = null;
 

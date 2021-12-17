@@ -70,18 +70,23 @@ public class NormalFormen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Landscape Modus wird deaktiviert
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        //Activity fuer die Normalformen wird als layout gesetzt
         setContentView(R.layout.activity_normal_formen);
 
+        //hier wird die Zeiterfassung fuer die txt vorbereitet
         Anfangszeit = null;
         Endzeit = null;
-
         Anfangszeit = Calendar.getInstance().getTime();
 
+        //den Textview IDs aus der xml werden zugeordnet
         TextView text = findViewById(R.id.textView7);
         TextView unterertext = findViewById(R.id.textView8);
 
-
+        //die Button IDs aus der xml werden zugeordnet
         klammerauf = findViewById(R.id.klammerauf);
         klammerzu = findViewById(R.id.klammerzu);
         a = findViewById(R.id.A);
@@ -98,25 +103,34 @@ public class NormalFormen extends AppCompatActivity {
         ButtonLoesung = findViewById(R.id.Loesung);
         test = "";
 
-
+        //die Methode ist dafuer da, das alle Buttons einheitlich Blau in der ganzen App sind
         ButtonBlaumacher();
 
+        //diese beiden sachen werden auf 0 gesetzt, damit man bei wiederholten starten der Activity wieder von vorne beginnt
         schwierigkeitsgrad = 0;
         fragenanzahl = 0;
+
+        //diese Buttons werden erst benoetigt wenn man die Frage beantwortet hat, deshalb werden sie unsichtbar gemacht
         weiter.setVisibility(View.INVISIBLE);
         ButtonLoesung.setVisibility(View.INVISIBLE);
         Buttonnochmal.setVisibility(View.INVISIBLE);
 
+        //diese Methode bekommt den aktuellen Schwierigkeitsgrad mitgegeben, damit der richtige Term erstellt wird
         schwierigkeit(schwierigkeitsgrad);
+
+        //die Methode waehlt ob KNF oder DNF gefragt ist
         Modus();
 
+        //hier wird die Aufgabenstellung gesetzt, je nachdem ob es KNF oder DNF ist
         if (DNFKNFGenerator.get(0)) {
             text.setText("Geben Sie für folgenden Term die DNF an! \n" + Aussage.toString());
         } else {
             text.setText("Geben Sie für folgenden Term die KNF an! \n" + Aussage.toString());
         }
 
-
+        /*
+        die Buttons schreiben in der Textview
+         */
         a.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,6 +205,13 @@ public class NormalFormen extends AppCompatActivity {
             }
         });
 
+        /*
+        mit dem bestaetigen Button wird der Text aus dem Textview genommen und zum String gemacht
+        dann wird ueberprueft ob das eingebene dem entspricht was die loesung erwartet
+        nach dem betaetigen wird sofern es falsch ist die Buttons Buttonnochmal und ButtonLoesung sichtbar gemacht und außerdem wird er rot
+        bei richtiger beantwortung wird der button gruen und man enthaehlt punkte die dem schwierigkeitsgrad angepasst werden
+        außerdem werden alle buttons zum schreiben dann unsichtbar gemacht
+         */
         bestaetigen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -285,6 +306,7 @@ public class NormalFormen extends AppCompatActivity {
             }
         });
 
+        //der button weiter laedt dann die naechste aufgabe
         weiter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -329,6 +351,7 @@ public class NormalFormen extends AppCompatActivity {
             }
         });
 
+        //Button nochmal damit kann man nochmal die Aufgabe probieren (sofern man es vorher falsch beantwortet hat)
         Buttonnochmal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -354,6 +377,7 @@ public class NormalFormen extends AppCompatActivity {
             }
         });
 
+        //hier wird die erwartete Loesung angezeigt
         ButtonLoesung.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -371,6 +395,7 @@ public class NormalFormen extends AppCompatActivity {
 
     }
 
+    //erstellt einen Term mit zwei Variablen
     public String zweierTerm() {
 
         ArrayList<String> LogikAussage = new ArrayList<String>();
@@ -436,6 +461,7 @@ public class NormalFormen extends AppCompatActivity {
         return Aussage;
     }
 
+    //erstellt einen Term mit drei Variablen
     public void dreierTerm() {
 
         ParserText = "";
@@ -509,41 +535,6 @@ public class NormalFormen extends AppCompatActivity {
             LogikAussage.add(5, "(");
         }
 
-        /*LogikAussage.add(Negation.get(0));
-        LogikAussage.add(offeneKlammer.get(0));
-        if (LogikAussage.contains("(")) {
-            Collections.shuffle(Negation);
-            LogikAussage.add(Negation.get(0));
-        }
-        LogikAussage.add(Variable.get(0));
-        LogikAussage.add(Junktoren.get(0));
-        Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));
-        if (!LogikAussage.contains("(")) {
-            Collections.shuffle(offeneKlammer);
-            LogikAussage.add(offeneKlammer.get(0));
-            if (LogikAussage.contains("(")) {
-                Collections.shuffle(Negation);
-                LogikAussage.add(Negation.get(0));
-            }
-        }
-        LogikAussage.add(Variable.get(1));
-        if (LogikAussage.contains("(")) {
-            if (LogikAussage.indexOf("(") == 1) {
-                LogikAussage.add(")");
-            }
-        }
-        Collections.shuffle(Junktoren);
-        LogikAussage.add(Junktoren.get(0));
-        Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));
-        LogikAussage.add(Variable.get(2));
-        if (LogikAussage.contains("(")) {
-            if (LogikAussage.indexOf("(") > 1) {
-                LogikAussage.add(")");
-            }
-        }*/
-
         for (int i = 0; i < LogikAussage.size(); i++) {
             ParserText += LogikAussage.get(i);
         }
@@ -568,6 +559,7 @@ public class NormalFormen extends AppCompatActivity {
 
     }
 
+    //Term mit vier Variablen erstellen
     public void viererTerm() {
 
         ParserText = "";
@@ -644,109 +636,6 @@ public class NormalFormen extends AppCompatActivity {
             }
         }
 
-        /*LogikAussage.add(Negation.get(0));                                          //0
-        LogikAussage.add(offeneKlammer.get(0));                                     //1
-        if (LogikAussage.contains("(")) {                                           //2
-            Collections.shuffle(Negation);
-            LogikAussage.add(Negation.get(0));
-        } else {                                                                    //2
-            LogikAussage.add("");
-        }
-        LogikAussage.add(Variable.get(0));                                          //3
-        LogikAussage.add(Junktoren.get(0));                                         //4
-        Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));                                          //5
-        if (LogikAussage.contains("(")){                                            //6
-            LogikAussage.add("");
-        }else if (LogikAussage.contains("<=>") || LogikAussage.contains("=>")){     //6
-            LogikAussage.add("(");
-        }else {                                                                     //6
-            Collections.shuffle(offeneKlammer);
-            LogikAussage.add(offeneKlammer.get(0));
-        }
-        if (LogikAussage.get(6).equals("(")){                                       //7
-            Collections.shuffle(Negation);
-            LogikAussage.add(Negation.get(0));
-        }else {                                                                     //7
-            LogikAussage.add("");
-        }
-        LogikAussage.add(Variable.get(1));                                          //8
-        if (LogikAussage.get(6).equals("(")){                                       //9
-            LogikAussage.add("");
-        }else if (LogikAussage.get(4).equals("<=>")||LogikAussage.get(4).equals("=>")){ //9
-            LogikAussage.set(1,"(");
-            LogikAussage.add(")");
-        }else if (LogikAussage.get(1).equals("(")){                                 //9
-            Collections.shuffle(GeschlosseneKlammer);
-            LogikAussage.add(GeschlosseneKlammer.get(0));
-        }else {                                                                     //9
-            LogikAussage.add("");
-        }
-        Collections.shuffle(Junktoren);
-        LogikAussage.add(Junktoren.get(0));                                         //10
-        Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));                                          //11
-
-        if (LogikAussage.contains("(")){
-            if (LogikAussage.get(6).equals("(")){                                   //12
-                Collections.shuffle(offeneKlammer);
-                LogikAussage.add(offeneKlammer.get(0));
-            }else if (LogikAussage.get(1).equals("(")){                             //12
-                LogikAussage.add("");
-            }
-        }else {                                                                     //12
-            Collections.shuffle(offeneKlammer);
-            LogikAussage.add(offeneKlammer.get(0));
-        }
-
-        if (LogikAussage.get(12).equals("(")){                                      //13
-            Collections.shuffle(Negation);
-            LogikAussage.add(Negation.get(0));
-        }else {                                                                     //13
-            LogikAussage.add("");
-        }
-        LogikAussage.add(Variable.get(2));                                          //14
-
-        if (LogikAussage.contains("(")){
-            if (LogikAussage.get(12).equals("(")){
-                LogikAussage.add("");
-            }else if (LogikAussage.get(6).equals("(")){
-                if (LogikAussage.get(1).equals("(")){
-                    LogikAussage.add(")");
-                }else if (LogikAussage.get(10).equals("<=>")||LogikAussage.get(10).equals("=>")){
-                    LogikAussage.add(")");
-                }else {
-                    Collections.shuffle(GeschlosseneKlammer);
-                    LogikAussage.add(GeschlosseneKlammer.get(0));
-                }
-
-            }else if (LogikAussage.get(1).equals("(")){
-                if (LogikAussage.contains(")")){
-                    LogikAussage.add("");
-                }else {
-                    LogikAussage.add(")");
-                }
-            }
-        }else {                                                                     //15
-            LogikAussage.add("");
-        }
-        Collections.shuffle(Junktoren);
-        LogikAussage.add(Junktoren.get(0));                                         //16
-        Collections.shuffle(Negation);
-        LogikAussage.add(Negation.get(0));                                          //17
-        LogikAussage.add(Variable.get(3));                                          //18
-        if (LogikAussage.get(12).equals("(")){
-            LogikAussage.add(")");
-        }
-        if (LogikAussage.get(6).equals("(")||LogikAussage.get(1).equals("(")){
-            if(LogikAussage.get(9).equals(")")||LogikAussage.get(15).equals(")")){
-                LogikAussage.add("");
-            }else {
-                LogikAussage.add(")");
-            }
-        }*/
-
-
         for (int i = 0; i < LogikAussage.size(); i++) {
             ParserText += LogikAussage.get(i);
         }
@@ -771,6 +660,7 @@ public class NormalFormen extends AppCompatActivity {
 
     }
 
+    //hier wird die KNF form ueberprueft
     public String KNFpruefer(String Parsertext) throws ParserException {
         Form = "";
         final FormulaFactory f = new FormulaFactory();
@@ -785,9 +675,10 @@ public class NormalFormen extends AppCompatActivity {
         Form = cnf.toString();
 
         return Form;
-        //Logikboolean = result.toString();
+
     }
 
+    ////prueft die DNF Formen
     public String DNFpruefer(String Parsertext) throws ParserException {
         Form = "";
         final FormulaFactory f = new FormulaFactory();
@@ -804,6 +695,7 @@ public class NormalFormen extends AppCompatActivity {
         return Form.toString();
     }
 
+    //hier wird die Methode vom Termerstellen der schwierigkeit zugeordnet
     public void schwierigkeit(int Schwierigkeit) {
         if (Schwierigkeit == 0) {
             zweierTerm();
@@ -817,6 +709,7 @@ public class NormalFormen extends AppCompatActivity {
         }
     }
 
+    //hier wird entschieden ob DNF oder KNF gefragt ist
     public void Modus() {
 
 
@@ -844,18 +737,20 @@ public class NormalFormen extends AppCompatActivity {
 
     }
 
+    //Activity wechsel , sofern man beendet bzw. die max fragen erreicht hat
     private void activityWechsel() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
+    //erstellen eines DropDown Menues
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.spiel_menu2, menu);
         return true;
     }
 
-    //Für Neustart und Endscreen, es werden verschiedene Dinge resettet
+    //Uebung wird beendet und es werden verschiedene Dinge resettet
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         try {
@@ -875,6 +770,7 @@ public class NormalFormen extends AppCompatActivity {
     }
 
 
+    //hier wird alles ueberpruefen vorbereitet und dann die loesung ueberprueft
     public void ueberpruefer(int schwierigkeit) {
         try {
             ArrayList<String> geschrListe = new ArrayList<>();
@@ -1036,6 +932,7 @@ public class NormalFormen extends AppCompatActivity {
 
     }
 
+    //Buttons werden alle blau gemacht um eine Einheitliche farbe zu haben
     public void ButtonBlaumacher() {
 
         klammerauf.setBackgroundColor(Color.BLUE);
@@ -1056,7 +953,7 @@ public class NormalFormen extends AppCompatActivity {
     }
 
     //Die Methoden speichern() und laden() sind übernommen von https://gist.github.com/codinginflow/6c13bd0d08416115798f17d45b5d8056
-
+    //Diese Methode speichert Dinge wie User, Activity, Anfangs und Endzeit sowie Punkte in eine txt Datei
     public void speichern() {
         laden();
 
@@ -1085,6 +982,7 @@ public class NormalFormen extends AppCompatActivity {
         }
     }
 
+    //die Methode laedt die txt Datei damit diese wieder hinzugefuegt wird um beim speichern in die txt alles davor nicht ueberschrieben wird
     public void laden(){
         FileInputStream fis = null;
 

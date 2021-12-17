@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.opencsv.CSVWriter;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,16 +37,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Aufgrund dessen, das die App den Darkmode uebernimmt, wird der hintergrund dunkel, wodurch man die schrift nicht mehr richtig erkennen kann, deshalb blockiert diese Zeile den Darkmode fuer die App
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        //der Landscape Mode ist fuer diese App deaktiviert
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
 
+        //IDs aus der Main xml werden den Buttons zugewiesen
         Button StartButton = findViewById(R.id.StartButton);
         Button Storage = findViewById(R.id.storage);
+
+        //Buttonfarbe auf Blau aendern, damit die App eine einheitliche Buttonfarbe haben
         StartButton.setBackgroundColor(Color.BLUE);
         Storage.setBackgroundColor(Color.BLUE);
 
+        //der Button wird fuer das IT Projekt noch nicht gebraucht
+        Storage.setVisibility(View.INVISIBLE);
+
+        //der Button ist dafuer um in die Themenauswahl zu kommen
         StartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,67 +66,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //noch nicht benoetigt
         Storage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                //checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE);
             }
         });
 
 
     }
 
+    //Wenn der StartButton betaetigt wird, wird diese Methode betaetigt und man wechselt in die Activity "Themenauswahl"
     private void activityWechsel() {
         Intent intent = new Intent(this, Themenauswahl.class);
         startActivity(intent);
     }
-
-   /* public void checkPermission(String permission, int requestCode)
-    {
-        // Checking if permission is not granted
-        if (ContextCompat.checkSelfPermission(MainActivity.this, permission) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[] { permission }, requestCode);
-        }
-        else {
-            Toast.makeText(MainActivity.this, "Permission already granted", Toast.LENGTH_SHORT).show();
-
-          try {
-              String name1 = "Hallo";
-              String no1 = "bioer";
-              File file = new File("/sdcard/test/");
-              file.mkdirs();
-              String csv = "/sdcard/test/a.csv";
-              CSVWriter csvWriter = new CSVWriter(new FileWriter(csv,true));
-              String row[] = new String[]{name1,no1};
-              csvWriter.writeNext(row);
-              csvWriter.close();
-              Toast.makeText(MainActivity.this, "WURDE ERSTELLT", Toast.LENGTH_SHORT).show();
-          }catch (Exception e){
-
-          }
-
-        }
-    }*/
-
-  /*  public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults)
-    {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == STORAGE_PERMISSION_CODE) {
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(MainActivity.this, "Storage Permission Granted", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                Toast.makeText(MainActivity.this, "Storage Permission Denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }*/
-
-
 
 }
 
