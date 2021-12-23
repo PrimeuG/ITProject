@@ -95,7 +95,7 @@ public class Junktoren extends AppCompatActivity {
         schwierigkeit(schwierigkeitsgrad);
 
         //hier wird die Aufgabenstellung gesetzt
-        Junktorenterm.setText("Ist die Aussage: \n" + Aussage + "\nin der unten beschriebenen Konstellation lösbar? ");
+        Junktorenterm.setText("Wie lautet der Wahrheitsgehalt der Aussage: \n" + Aussage + "\nin der unten beschriebenen Konstellation? ");
 
         //Der weiter button soll erst sichtbar werden, wenn die frage beantwortet wurde, somit wird er anfangs invisible gestellt
         weiter.setVisibility(View.INVISIBLE);
@@ -175,7 +175,7 @@ public class Junktoren extends AppCompatActivity {
                     nichterfuellbar.setBackgroundColor(Color.BLUE);
                     schwierigkeit(schwierigkeitsgrad);
                  //   ueberpruefen();
-                    Junktorenterm.setText("Ist die Aussage: \n" + Aussage + "\nin der unten beschriebenen Konstellation lösbar? ");
+                    Junktorenterm.setText("Wie lautet der Wahrheitsgehalt der Aussage: \n" + Aussage + "\nin der unten beschriebenen Konstellation?");
                    // AussagenTerm.setText("a = " + Booluebernehmer.get(0) + " b = " + Booluebernehmer.get(1) + " c = " + Booluebernehmer.get(2));
                     weiter.setVisibility(View.INVISIBLE);
                 } else {

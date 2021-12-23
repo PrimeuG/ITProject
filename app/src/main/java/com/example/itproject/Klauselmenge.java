@@ -50,6 +50,8 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
     ArrayList<Integer> Klauselwaehler = new ArrayList<>();
     ArrayList<String> EinzelKlausel = new ArrayList<>();
     ArrayList<String> Mehrfachklausel = new ArrayList<>();
+    ArrayList<String> Einzel4Klausel = new ArrayList<>();
+    ArrayList<String> Mehrfach4klausel = new ArrayList<>();
 
     private static final String FILE_NAME = "Auswertung.txt";
 
@@ -85,7 +87,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
 
         //Landscape Modus ist deaktiviert.
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //hier wird die Klauselmenge xml geladen
         setContentView(R.layout.activity_klauselmenge);
@@ -115,6 +117,8 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         Klauselwaehler.clear();
         EinzelKlausel.clear();
         Mehrfachklausel.clear();
+        Einzel4Klausel.clear();
+        Mehrfach4klausel.clear();
 
         //Klauselwaehler wird genutzt um zu Entscheiden ob Einzelklauseln oder Mehrfachklauseln genutzt werden
         Klauselwaehler.add(0);
@@ -127,6 +131,15 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         EinzelKlausel.add("{¬b}");
         EinzelKlausel.add("{c}");
         EinzelKlausel.add("{¬c}");
+
+        Einzel4Klausel.add("{a}");
+        Einzel4Klausel.add("{¬a}");
+        Einzel4Klausel.add("{b}");
+        Einzel4Klausel.add("{¬b}");
+        Einzel4Klausel.add("{c}");
+        Einzel4Klausel.add("{¬c}");
+        Einzel4Klausel.add("{d}");
+        Einzel4Klausel.add("{¬d}");
 
         //Alle Klauseln die (ohne Tauschen z.B. {a,b}{b,a}) moeglich sind
         Mehrfachklausel.add("{a,b}");
@@ -150,6 +163,81 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         Mehrfachklausel.add("{¬a,b,¬c}");
         Mehrfachklausel.add("{¬a,¬b,c}");
         Mehrfachklausel.add("{¬a,¬b,¬c}");
+
+
+        //Alle Klauseln die (ohne Tauschen z.B. {a,b}{b,a}) moeglich sind
+        Mehrfach4klausel.add("{a,b}");
+        Mehrfach4klausel.add("{a,¬b}");
+        Mehrfach4klausel.add("{¬a,b}");
+        Mehrfach4klausel.add("{¬a,¬b}");
+        Mehrfach4klausel.add("{a,c}");
+        Mehrfach4klausel.add("{a,¬c}");
+        Mehrfach4klausel.add("{¬a,c}");
+        Mehrfach4klausel.add("{¬a,¬c}");
+        Mehrfach4klausel.add("{b,c}");
+        Mehrfach4klausel.add("{b,¬c}");
+        Mehrfach4klausel.add("{¬b,c}");
+        Mehrfach4klausel.add("{¬b,¬c}");
+        Mehrfach4klausel.add("{a,d}");
+        Mehrfach4klausel.add("{¬a,d}");
+        Mehrfach4klausel.add("{a,¬d}");
+        Mehrfach4klausel.add("{¬a,¬d}");
+        Mehrfach4klausel.add("{¬a,¬d}");
+        Mehrfach4klausel.add("{b,d}");
+        Mehrfach4klausel.add("{¬b,d}");
+        Mehrfach4klausel.add("{b,¬d}");
+        Mehrfach4klausel.add("{¬b,¬d}");
+        Mehrfach4klausel.add("{c,d}");
+        Mehrfach4klausel.add("{¬c,d}");
+        Mehrfach4klausel.add("{c,¬d}");
+        Mehrfach4klausel.add("{¬c,¬d}");
+
+
+        Mehrfach4klausel.add("{a,b,c}");
+        Mehrfach4klausel.add("{a,b,¬c}");
+        Mehrfach4klausel.add("{a,¬b,c}");
+        Mehrfach4klausel.add("{a,¬b,¬c}");
+        Mehrfach4klausel.add("{¬a,b,c}");
+        Mehrfach4klausel.add("{¬a,b,¬c}");
+        Mehrfach4klausel.add("{¬a,¬b,c}");
+        Mehrfach4klausel.add("{¬a,¬b,¬c}");
+        Mehrfach4klausel.add("{a,b,d}");
+        Mehrfach4klausel.add("{a,b,¬d}");
+        Mehrfach4klausel.add("{a,¬b,d}");
+        Mehrfach4klausel.add("{a,¬b,¬d}");
+        Mehrfach4klausel.add("{¬a,b,d}");
+        Mehrfach4klausel.add("{¬a,b,¬d}");
+        Mehrfach4klausel.add("{¬a,¬b,d}");
+        Mehrfach4klausel.add("{¬a,¬b,¬d}");
+        Mehrfach4klausel.add("{a,c,d}");
+        Mehrfach4klausel.add("{a,c,¬d}");
+        Mehrfach4klausel.add("{a,¬c,d}");
+        Mehrfach4klausel.add("{a,¬c,¬d}");
+        Mehrfach4klausel.add("{¬a,c,d}");
+        Mehrfach4klausel.add("{¬a,c,¬d}");
+        Mehrfach4klausel.add("{¬a,¬c,d}");
+        Mehrfach4klausel.add("{¬a,¬c,¬d}");
+        Mehrfach4klausel.add("{b,c,d}");
+        Mehrfach4klausel.add("{b,c,¬d}");
+        Mehrfach4klausel.add("{b,¬c,d}");
+        Mehrfach4klausel.add("{b,¬c,¬d}");
+        Mehrfach4klausel.add("{¬b,c,d}");
+        Mehrfach4klausel.add("{¬b,c,¬d}");
+        Mehrfach4klausel.add("{¬b,¬c,d}");
+        Mehrfach4klausel.add("{¬b,¬c,¬d}");
+
+        Mehrfach4klausel.add("{a,b,c,d}");
+        Mehrfach4klausel.add("{a,b,c,¬d}");
+        Mehrfach4klausel.add("{a,b,¬c,d}");
+        Mehrfach4klausel.add("{a,b,¬c,¬d}");
+        Mehrfach4klausel.add("{a,¬b,c,d}");
+        Mehrfach4klausel.add("{a,¬b,c,¬d}");
+        Mehrfach4klausel.add("{a,¬b,¬c,d}");
+        Mehrfach4klausel.add("{a,¬b,¬c,¬d}");
+        Mehrfach4klausel.add("{¬a,b,c,d}");
+        Mehrfach4klausel.add("{¬a,b,c,¬d}");
+        Mehrfach4klausel.add("{¬a,b,¬c,d}");
+        Mehrfach4klausel.add("{¬a,b,¬c,¬d}");
 
 
         //Buttons werden Blau gefaerbt
@@ -204,35 +292,35 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         nichtErfuellbar.setBackgroundColor(Color.RED);
                         punkte++;
 
-                        if(schwierigkeit == 5){
+                        if (schwierigkeit == 5) {
                             schwierigkeitspunkte1++;
                             schwierigkeitsfrage1++;
-                        }else if (schwierigkeit == 7){
+                        } else if (schwierigkeit == 7) {
                             schwierigkeitspunkte2++;
                             schwierigkeitsfrage2++;
-                        }else if (schwierigkeit == 9){
+                        } else if (schwierigkeit == 9) {
                             schwierigkeitspunkte3++;
                             schwierigkeitsfrage3++;
                         }
 
-                        if (schwierigkeit < 9){
-                            schwierigkeit+=2;
+                        if (schwierigkeit < 9) {
+                            schwierigkeit += 2;
                         }
 
                     } else {
                         erfuellbar.setBackgroundColor(Color.RED);
                         nichtErfuellbar.setBackgroundColor(Color.GREEN);
 
-                        if(schwierigkeit == 5){
+                        if (schwierigkeit == 5) {
                             schwierigkeitsfrage1++;
-                        }else if (schwierigkeit == 7){
+                        } else if (schwierigkeit == 7) {
                             schwierigkeitsfrage2++;
-                        }else if (schwierigkeit == 9){
+                        } else if (schwierigkeit == 9) {
                             schwierigkeitsfrage3++;
                         }
 
-                        if (schwierigkeit > 5){
-                            schwierigkeit-=2;
+                        if (schwierigkeit > 5) {
+                            schwierigkeit -= 2;
                         }
                     }
                 } catch (ParserException e) {
@@ -249,35 +337,35 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                         erfuellbar.setBackgroundColor(Color.GREEN);
                         nichtErfuellbar.setBackgroundColor(Color.RED);
 
-                        if(schwierigkeit == 5){
+                        if (schwierigkeit == 5) {
                             schwierigkeitsfrage1++;
-                        }else if (schwierigkeit == 7){
+                        } else if (schwierigkeit == 7) {
                             schwierigkeitsfrage2++;
-                        }else if (schwierigkeit == 9){
+                        } else if (schwierigkeit == 9) {
                             schwierigkeitsfrage3++;
                         }
 
-                        if (schwierigkeit > 5){
-                            schwierigkeit-=2;
+                        if (schwierigkeit > 5) {
+                            schwierigkeit -= 2;
                         }
                     } else {
                         erfuellbar.setBackgroundColor(Color.RED);
                         nichtErfuellbar.setBackgroundColor(Color.GREEN);
                         punkte++;
 
-                        if(schwierigkeit == 5){
+                        if (schwierigkeit == 5) {
                             schwierigkeitspunkte1++;
                             schwierigkeitsfrage1++;
-                        }else if (schwierigkeit == 7){
+                        } else if (schwierigkeit == 7) {
                             schwierigkeitspunkte2++;
                             schwierigkeitsfrage2++;
-                        }else if (schwierigkeit == 9){
+                        } else if (schwierigkeit == 9) {
                             schwierigkeitspunkte3++;
                             schwierigkeitsfrage3++;
                         }
 
-                        if (schwierigkeit < 9){
-                            schwierigkeit+=2;
+                        if (schwierigkeit < 9) {
+                            schwierigkeit += 2;
                         }
                     }
                 } catch (ParserException e) {
@@ -315,8 +403,8 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         danach wird alles zurueck gesetzt damit man bei einer weiteren nutzung des Themengebietes wieder neue Klauseln erstellt und die Punkte nicht weiter gezaehlt werden
          */
         if (fragenanzahl >= maxfragen) {
-            fragenanzahl=0;
-            schwierigkeit=5;
+            fragenanzahl = 0;
+            schwierigkeit = 5;
             Endzeit = Calendar.getInstance().getTime();
             speichern();
             signatureView.clearCanvas();
@@ -358,50 +446,22 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         Endklausel.clear();
         ParserKlausel.clear();
 
-        for (int i = 0; i < schwierigkeit; i++) {
+        if (schwierigkeit == 5 || schwierigkeit == 7) {
+            for (int i = 0; i < schwierigkeit; i++) {
 
-            String ueberpruefer;
-            boolean kommageber = false;
-            String uebernehmer = "";
+                String ueberpruefer;
+                boolean kommageber = false;
+                String uebernehmer = "";
 
-            Collections.shuffle(Klauselwaehler);
+                Collections.shuffle(Klauselwaehler);
 
-            if (Klauselwaehler.get(0) == 0 && EinzelklauselStopper == 0) {
-                Collections.shuffle(EinzelKlausel);
-                while (Endklausel.contains(Mehrfachklausel.get(0))){
-                    Collections.shuffle(Mehrfachklausel);
-                }
-                Endklausel.add(EinzelKlausel.get(0));
-                ueberpruefer = EinzelKlausel.get(0);
-                for (int x = 0; x < ueberpruefer.length(); x++) {
-                    if (ueberpruefer.charAt(x) == 123) {
-                        uebernehmer = "(";
-                    } else if (ueberpruefer.charAt(x) == 125) {
-                        uebernehmer += ")";
-                    } else if (ueberpruefer.charAt(x) == 172) {
-                        uebernehmer += "~";
-                    } else if (ueberpruefer.charAt(x) != 123) {
-                        uebernehmer += String.valueOf(ueberpruefer.charAt(x));
+                if (Klauselwaehler.get(0) == 0 && EinzelklauselStopper == 0) {
+                    Collections.shuffle(EinzelKlausel);
+                    while (Endklausel.contains(Mehrfachklausel.get(0))) {
+                        Collections.shuffle(Mehrfachklausel);
                     }
-                }
-                if (uebernehmer.contains("¬")) {
-                    uebernehmer = uebernehmer.replaceAll("¬", "~");
-                }
-                ParserKlausel.add(uebernehmer);
-                EinzelklauselStopper++;
-                kommageber = true;
-            } else {
-
-                Collections.shuffle(Mehrfachklausel);
-                while (Endklausel.contains(Mehrfachklausel.get(0))){
-                    Collections.shuffle(Mehrfachklausel);
-                }
-                if (Endklausel.contains(Mehrfachklausel.get(0))) {
-                    i--;
-                    kommageber = false;
-                } else {
-                    Endklausel.add(Mehrfachklausel.get(0));
-                    ueberpruefer = Mehrfachklausel.get(0);
+                    Endklausel.add(EinzelKlausel.get(0));
+                    ueberpruefer = EinzelKlausel.get(0);
                     for (int x = 0; x < ueberpruefer.length(); x++) {
                         if (ueberpruefer.charAt(x) == 123) {
                             uebernehmer = "(";
@@ -413,29 +473,139 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
                             uebernehmer += String.valueOf(ueberpruefer.charAt(x));
                         }
                     }
-
-                    //uebernehmer = uebernehmer.replaceAll("}",")");
                     if (uebernehmer.contains("¬")) {
                         uebernehmer = uebernehmer.replaceAll("¬", "~");
-                    } else if (uebernehmer.contains(",")) {
-                        uebernehmer = uebernehmer.replaceAll(",", "|");
+                    }
+                    ParserKlausel.add(uebernehmer);
+                    EinzelklauselStopper++;
+                    kommageber = true;
+                } else {
+
+                    Collections.shuffle(Mehrfachklausel);
+                    while (Endklausel.contains(Mehrfachklausel.get(0))) {
+                        Collections.shuffle(Mehrfachklausel);
+                    }
+                    if (Endklausel.contains(Mehrfachklausel.get(0))) {
+                        i--;
+                        kommageber = false;
+                    } else {
+                        Endklausel.add(Mehrfachklausel.get(0));
+                        ueberpruefer = Mehrfachklausel.get(0);
+                        for (int x = 0; x < ueberpruefer.length(); x++) {
+                            if (ueberpruefer.charAt(x) == 123) {
+                                uebernehmer = "(";
+                            } else if (ueberpruefer.charAt(x) == 125) {
+                                uebernehmer += ")";
+                            } else if (ueberpruefer.charAt(x) == 172) {
+                                uebernehmer += "~";
+                            } else if (ueberpruefer.charAt(x) != 123) {
+                                uebernehmer += String.valueOf(ueberpruefer.charAt(x));
+                            }
+                        }
+
+                        //uebernehmer = uebernehmer.replaceAll("}",")");
+                        if (uebernehmer.contains("¬")) {
+                            uebernehmer = uebernehmer.replaceAll("¬", "~");
+                        } else if (uebernehmer.contains(",")) {
+                            uebernehmer = uebernehmer.replaceAll(",", "|");
+                        }
+
+                        ParserKlausel.add(uebernehmer);
+                        if (i < schwierigkeit - 1) {
+                            kommageber = true;
+                        } else {
+                            kommageber = false;
+                        }
                     }
 
-                    ParserKlausel.add(uebernehmer);
-                    if (i < schwierigkeit-1) {
-                        kommageber = true;
-                    } else {
-                        kommageber = false;
-                    }
                 }
 
+                if (kommageber) {
+                    Endklausel.add(",");
+                    ParserKlausel.add("&");
+                }
             }
+        } else if (schwierigkeit == 9) {
+            for (int i = 0; i < 6; i++) {
 
-            if (kommageber) {
-                Endklausel.add(",");
-                ParserKlausel.add("&");
+                String ueberpruefer;
+                boolean kommageber = false;
+                String uebernehmer = "";
+
+                Collections.shuffle(Klauselwaehler);
+
+                if (Klauselwaehler.get(0) == 0 && EinzelklauselStopper == 0) {
+                    Collections.shuffle(Einzel4Klausel);
+                    while (Endklausel.contains(Mehrfach4klausel.get(0))) {
+                        Collections.shuffle(Mehrfach4klausel);
+                    }
+                    Endklausel.add(Einzel4Klausel.get(0));
+                    ueberpruefer = Einzel4Klausel.get(0);
+                    for (int x = 0; x < ueberpruefer.length(); x++) {
+                        if (ueberpruefer.charAt(x) == 123) {
+                            uebernehmer = "(";
+                        } else if (ueberpruefer.charAt(x) == 125) {
+                            uebernehmer += ")";
+                        } else if (ueberpruefer.charAt(x) == 172) {
+                            uebernehmer += "~";
+                        } else if (ueberpruefer.charAt(x) != 123) {
+                            uebernehmer += String.valueOf(ueberpruefer.charAt(x));
+                        }
+                    }
+                    if (uebernehmer.contains("¬")) {
+                        uebernehmer = uebernehmer.replaceAll("¬", "~");
+                    }
+                    ParserKlausel.add(uebernehmer);
+                    EinzelklauselStopper++;
+                    kommageber = true;
+                } else {
+
+                    Collections.shuffle(Mehrfach4klausel);
+                    while (Endklausel.contains(Mehrfach4klausel.get(0))) {
+                        Collections.shuffle(Mehrfach4klausel);
+                    }
+                    if (Endklausel.contains(Mehrfach4klausel.get(0))) {
+                        i--;
+                        kommageber = false;
+                    } else {
+                        Endklausel.add(Mehrfach4klausel.get(0));
+                        ueberpruefer = Mehrfach4klausel.get(0);
+                        for (int x = 0; x < ueberpruefer.length(); x++) {
+                            if (ueberpruefer.charAt(x) == 123) {
+                                uebernehmer = "(";
+                            } else if (ueberpruefer.charAt(x) == 125) {
+                                uebernehmer += ")";
+                            } else if (ueberpruefer.charAt(x) == 172) {
+                                uebernehmer += "~";
+                            } else if (ueberpruefer.charAt(x) != 123) {
+                                uebernehmer += String.valueOf(ueberpruefer.charAt(x));
+                            }
+                        }
+
+                        //uebernehmer = uebernehmer.replaceAll("}",")");
+                        if (uebernehmer.contains("¬")) {
+                            uebernehmer = uebernehmer.replaceAll("¬", "~");
+                        } else if (uebernehmer.contains(",")) {
+                            uebernehmer = uebernehmer.replaceAll(",", "|");
+                        }
+
+                        ParserKlausel.add(uebernehmer);
+                        if (i < 6 - 1) {
+                            kommageber = true;
+                        } else {
+                            kommageber = false;
+                        }
+                    }
+
+                }
+
+                if (kommageber) {
+                    Endklausel.add(",");
+                    ParserKlausel.add("&");
+                }
             }
         }
+
 
         String Klauselmengen = "";
 
@@ -454,7 +624,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
     //die Methode erstellt die Aufgabenstellung und setzt diese im textview
     public void textersteller() {
 
-        text.setText("Ist diese Klauselmenge erfüllbar?\n" + Klauselmenge);
+        text.setText("Ist diese Klauselmenge erfüllbar?\n{" + Klauselmenge+"}");
 
     }
 
@@ -518,7 +688,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    public void ButtonBlaumacher(){
+    public void ButtonBlaumacher() {
         erfuellbar.setBackgroundColor(Color.BLUE);
         nichtErfuellbar.setBackgroundColor(Color.BLUE);
         elf.setBackgroundColor(Color.BLUE);
@@ -553,7 +723,7 @@ public class Klauselmenge extends AppCompatActivity implements View.OnClickListe
     }
 
     //Die Methode ist dafuer da, dass bei der Methode speichern nicht die txt ueberschrieben wird, denn sie wird vorher geladen und dann bei der speicher methode mit uebernommen
-    public void laden(){
+    public void laden() {
         FileInputStream fis = null;
 
         try {

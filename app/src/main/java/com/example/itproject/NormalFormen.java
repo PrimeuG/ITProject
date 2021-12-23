@@ -45,6 +45,7 @@ public class NormalFormen extends AppCompatActivity {
     public static String test = "";
     public static int fragenanzahl = 0;
     public static String texti = "";
+    public static String form2 = "";
 
     ArrayList<Boolean> DNFKNFGenerator = new ArrayList<>();
     ArrayList<String> pruefListeErgebnis = new ArrayList<>();
@@ -231,11 +232,11 @@ public class NormalFormen extends AppCompatActivity {
                     } else if (pruefListeErgebnis.contains("true")) {
 
                         weiter.setBackgroundColor(Color.GREEN);
-                        if (schwierigkeitsgrad == 0){
+                        if (schwierigkeitsgrad == 0) {
                             schwierigkeitsgradpunkte1++;
-                        }else if (schwierigkeitsgrad == 1){
+                        } else if (schwierigkeitsgrad == 1) {
                             schwierigkeitsgradpunkte2++;
-                        }else if (schwierigkeitsgrad == 2){
+                        } else if (schwierigkeitsgrad == 2) {
                             schwierigkeitsgradpunkte3++;
                         }
                         schwierigkeitsgrad = 1;
@@ -253,11 +254,11 @@ public class NormalFormen extends AppCompatActivity {
                         ButtonLoesung.setVisibility(View.VISIBLE);
                     } else if (pruefListeErgebnis.contains("true")) {
 
-                        if (schwierigkeitsgrad == 0){
+                        if (schwierigkeitsgrad == 0) {
                             schwierigkeitsgradpunkte1++;
-                        }else if (schwierigkeitsgrad == 1){
+                        } else if (schwierigkeitsgrad == 1) {
                             schwierigkeitsgradpunkte2++;
-                        }else if (schwierigkeitsgrad == 2){
+                        } else if (schwierigkeitsgrad == 2) {
                             schwierigkeitsgradpunkte3++;
                         }
                         schwierigkeitsgrad = 2;
@@ -276,11 +277,11 @@ public class NormalFormen extends AppCompatActivity {
                         ButtonLoesung.setVisibility(View.VISIBLE);
                     } else if (pruefListeErgebnis.contains("true")) {
                         weiter.setBackgroundColor(Color.GREEN);
-                        if (schwierigkeitsgrad == 0){
+                        if (schwierigkeitsgrad == 0) {
                             schwierigkeitsgradpunkte1++;
-                        }else if (schwierigkeitsgrad == 1){
+                        } else if (schwierigkeitsgrad == 1) {
                             schwierigkeitsgradpunkte2++;
-                        }else if (schwierigkeitsgrad == 2){
+                        } else if (schwierigkeitsgrad == 2) {
                             schwierigkeitsgradpunkte3++;
                         }
                     } else {
@@ -384,7 +385,7 @@ public class NormalFormen extends AppCompatActivity {
                 String formuebernehmer = Form;
 
                 try {
-                    formuebernehmer = formuebernehmer.replaceAll("~", "¬").replaceAll("&", "∧").replaceAll("\\|", "∨").replaceAll("\\s+","");
+                    formuebernehmer = formuebernehmer.replaceAll("~", "¬").replaceAll("&", "∧").replaceAll("\\|", "∨").replaceAll("\\s+", "");
                     unterertext.setText(formuebernehmer);
                 } catch (Exception e) {
 
@@ -681,6 +682,7 @@ public class NormalFormen extends AppCompatActivity {
     ////prueft die DNF Formen
     public String DNFpruefer(String Parsertext) throws ParserException {
         Form = "";
+        form2 = "";
         final FormulaFactory f = new FormulaFactory();
         final PropositionalParser p = new PropositionalParser(f);
         final Formula formula = p.parse(Parsertext);
@@ -692,6 +694,7 @@ public class NormalFormen extends AppCompatActivity {
         Formula test = dnfFactorization.apply(formula, true);
         // System.out.println(test.toString());
         Form = test.toString();
+        Form = "(" + Form.replaceAll("\\|", ")|(") + ")";
         return Form.toString();
     }
 
@@ -983,7 +986,7 @@ public class NormalFormen extends AppCompatActivity {
     }
 
     //die Methode laedt die txt Datei damit diese wieder hinzugefuegt wird um beim speichern in die txt alles davor nicht ueberschrieben wird
-    public void laden(){
+    public void laden() {
         FileInputStream fis = null;
 
         try {
